@@ -1,0 +1,42 @@
+{{ define "main" }}
+<div class="page-grid">
+  <div class="article article--section">
+    {{- partial "breadcrumbs.html" . }}
+    <header class="article__header">
+      <h1>{{ .Title }}</h1>
+      {{- with .Description }}<p class="article__lede">{{ . }}</p>{{ end }}
+    </header>
+    {{- with .Content }}
+    <div class="prose">{{ . }}</div>
+    {{- end }}
+
+    {{- $subsections := .Sections.ByWeight }}
+    {{- with $subsections }}
+    <section class="listing" aria-labelledby="subsections-heading">
+      <h2 id="subsections-heading">Topics in this section</h2>
+      <ul class="card-list">
+        {{- range . }}
+        {{- $count := len .RegularPagesRecursive }}
+        <li class="card">
+          <a class="card__link" href="{{ .RelPermalink }}">
+            <span class="card__title">{{ .LinkTitle }}</span>
+            {{- with .Description }}<span class="card__desc">{{ . }}</span>{{ end }}
+            <span class="card__meta">{{ $count }} published {{ cond (eq $count 1) "article" "articles" }}{{ with .Params.planned }} · {{ len . }} planned{{ end }}</span>
+          </a>
+        </li>
+        {{- end }}
+      </ul>
+    </section>
+    {{- end }}
+
+    {{- with .RegularPages.ByWeight }}
+    <section class="listing" aria-labelledby="articles-heading">
+      <h2 id="articles-heading">Articles</h2>
+      {{- partial "page-cards.html" . }}
+    </section>
+    {{- end }}
+
+    {{- partial "planned.html" . }}
+  </div>
+</div>
+{{ end }}

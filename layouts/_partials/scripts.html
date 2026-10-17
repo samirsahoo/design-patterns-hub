@@ -1,0 +1,12 @@
+{{- $js := resources.Get "js/main.js" }}
+{{- if hugo.IsProduction }}{{ $js = $js | minify | fingerprint }}{{ end }}
+<script src="{{ $js.RelPermalink }}" defer></script>
+{{- /* Mermaid is ~3.5 MB, so it is loaded only on pages whose content
+     contains a ```mermaid block (flag set by the render hook). It is
+     vendored under static/js/vendor so the site never depends on a CDN. */}}
+{{- if .Store.Get "hasMermaid" }}
+<script src="{{ "js/vendor/mermaid.min.js" | relURL }}" defer></script>
+{{- $mjs := resources.Get "js/diagrams.js" }}
+{{- if hugo.IsProduction }}{{ $mjs = $mjs | minify | fingerprint }}{{ end }}
+<script src="{{ $mjs.RelPermalink }}" defer></script>
+{{- end }}

@@ -1,0 +1,53 @@
+{{ define "main" }}
+<div class="home">
+  <section class="hero">
+    <p class="hero__eyebrow">An open engineering handbook</p>
+    <h1 class="hero__title">{{ site.Title }}</h1>
+    <p class="hero__tagline">{{ site.Params.tagline }}</p>
+    <p class="hero__desc">{{ site.Params.description }}</p>
+    <div class="hero__actions">
+      {{- with site.GetPage "/learning-paths" }}<a class="button button--primary" href="{{ .RelPermalink }}">Choose a learning path</a>{{ end }}
+      {{- with site.GetPage "/design-patterns/gof-overview" }}<a class="button" href="{{ .RelPermalink }}">Browse the 23 GoF patterns</a>{{ end }}
+    </div>
+  </section>
+
+  {{- with .Content }}
+  <section class="prose home__intro">{{ . }}</section>
+  {{- end }}
+
+  {{- with .Params.featured }}
+  <section class="home__block" aria-labelledby="start-heading">
+    <h2 id="start-heading">Start here</h2>
+    {{- $pages := slice }}
+    {{- range . }}
+      {{- with site.GetPage . }}{{ $pages = $pages | append . }}{{ else }}{{ errorf "Featured page %q does not resolve" . }}{{ end }}
+    {{- end }}
+    {{- partial "page-cards.html" $pages }}
+  </section>
+  {{- end }}
+
+  <section class="home__block" aria-labelledby="sections-heading">
+    <h2 id="sections-heading">Explore by topic</h2>
+    <ul class="card-list card-list--sections">
+      {{- range site.Home.Sections.ByWeight }}
+      {{- if not .Params.hideInNav }}
+      {{- $count := len .RegularPagesRecursive }}
+      <li class="card">
+        <a class="card__link" href="{{ .RelPermalink }}">
+          <span class="card__title">{{ .LinkTitle }}</span>
+          {{- with .Description }}<span class="card__desc">{{ . }}</span>{{ end }}
+          <span class="card__meta">{{ $count }} published {{ cond (eq $count 1) "page" "pages" }}</span>
+        </a>
+      </li>
+      {{- end }}
+      {{- end }}
+    </ul>
+  </section>
+
+  <section class="home__block" aria-labelledby="recent-heading">
+    <h2 id="recent-heading">Recently reviewed</h2>
+    {{- $reviewed := where site.RegularPages "Params.lastReviewed" "!=" nil }}
+    {{- partial "page-cards.html" (first 6 (sort $reviewed "Params.lastReviewed" "desc")) }}
+  </section>
+</div>
+{{ end }}

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="{{ site.Language.Locale | default "en" }}">
+<head>
+  {{- partial "head.html" . }}
+</head>
+<body class="kind-{{ .Kind }}{{ with .Section }} section-{{ . }}{{ end }}">
+  <a class="skip-link" href="#main">Skip to content</a>
+  {{- partial "header.html" . }}
+  <div class="layout{{ if .Params.hideSidebar }} layout--wide{{ end }}">
+    {{- if not .Params.hideSidebar }}
+    {{- partial "sidebar.html" . }}
+    {{- end }}
+    <main id="main" class="main" tabindex="-1">
+      {{- block "main" . }}{{ end }}
+    </main>
+  </div>
+  {{- partial "footer.html" . }}
+  {{- partial "scripts.html" . }}
+</body>
+</html>

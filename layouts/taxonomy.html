@@ -1,0 +1,16 @@
+{{ define "main" }}
+<div class="page-grid">
+  <div class="article article--section">
+    {{- partial "breadcrumbs.html" . }}
+    <header class="article__header">
+      <h1>{{ .Title }}</h1>
+      <p class="article__lede">Browse every published article by topic tag.</p>
+    </header>
+    <ul class="tag-cloud">
+      {{- range .Data.Terms.Alphabetical }}
+      <li><a class="tag" href="{{ .Page.RelPermalink }}">#{{ .Page.LinkTitle }} <span class="tag__count">{{ .Count }}</span></a></li>
+      {{- end }}
+    </ul>
+  </div>
+</div>
+{{ end }}

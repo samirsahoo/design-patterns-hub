@@ -1,0 +1,7 @@
+{{- .Page.Store.Set "hasMermaid" true -}}
+{{- /* The source stays readable as text when JavaScript is unavailable or
+     when printing before rendering. assets/js/diagrams.js renders it. */ -}}
+<figure class="diagram"{{ with .Attributes.title }} aria-label="{{ . }}"{{ end }}>
+  {{- with .Attributes.title }}<figcaption class="diagram__title">{{ . }}</figcaption>{{ end }}
+  <pre class="mermaid">{{ .Inner | htmlEscape | safeHTML }}</pre>
+</figure>

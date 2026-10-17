@@ -1,0 +1,19 @@
+{{ define "main" }}
+<div class="page-grid">
+  <div class="article article--section">
+    {{- partial "breadcrumbs.html" . }}
+    <header class="article__header">
+      <h1>{{ .Title }}</h1>
+      <p class="article__lede">Search titles, headings, tags and article text. The index is a static file, so search runs entirely in your browser.</p>
+    </header>
+    <form class="search-page" action="{{ .RelPermalink }}" method="get" data-index="{{ "search-index.json" | relURL }}">
+      <label class="visually-hidden" for="search-page-input">Search query</label>
+      <input id="search-page-input" class="search-page__input" type="search" name="q" placeholder="e.g. idempotency, aggregate, open/closed" autocomplete="off">
+      <button class="button button--primary" type="submit">Search</button>
+    </form>
+    <p class="search-page__status" role="status" aria-live="polite"></p>
+    <ol class="search-page__results"></ol>
+    <noscript><p>Search needs JavaScript. You can browse by <a href="{{ "tags/" | relURL }}">tag</a> or use the navigation instead.</p></noscript>
+  </div>
+</div>
+{{ end }}

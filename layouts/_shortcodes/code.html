@@ -1,0 +1,29 @@
+{{- /* Includes a source file from the repository so the code on the page is
+     exactly the code that CI compiles and runs.
+     Usage: code file="examples/java/src/hub/patterns/strategy/Checkout.java"
+     Optional: lang="java" (default: file extension), title="…",
+               region="name" to include only the lines between
+               "// region name" and "// endregion" markers. */ -}}
+{{- $file := .Get "file" -}}
+{{- if not $file }}{{ errorf "code shortcode in %s needs a file= parameter" .Page.File.Path }}{{ end -}}
+{{- if not (fileExists $file) }}{{ errorf "code shortcode in %s: file %q not found" .Page.File.Path $file }}{{ end -}}
+{{- $src := readFile $file | replaceRE "\r\n" "\n" -}}
+{{- with .Get "region" -}}
+  {{- $pattern := printf `(?s)// region %s\n(.*?)\n\s*// endregion` . -}}
+  {{- $m := findRESubmatch $pattern $src 1 -}}
+  {{- if not $m }}{{ errorf "code shortcode in %s: region %q not found in %s" $.Page.File.Path . $file }}{{ end -}}
+  {{- $src = index (index $m 0) 1 -}}
+{{- end -}}
+{{- /* Strip region markers from whole-file includes. */ -}}
+{{- $src = replaceRE `(?m)^[ \t]*// (end)?region.*\n` "" $src | strings.TrimRight "\n" -}}
+{{- $lang := .Get "lang" | default (strings.TrimPrefix "." (path.Ext $file)) -}}
+{{- $title := .Get "title" | default (path.Base $file) -}}
+<figure class="code-file">
+  <figcaption class="code-file__caption">
+    <span class="code-file__name">{{ $title }}</span>
+    {{- with site.Params.repoURL }}
+    <a class="code-file__source" href="{{ . }}/blob/{{ site.Params.repoBranch }}/{{ $file }}" rel="noopener">View source</a>
+    {{- end }}
+  </figcaption>
+  {{ transform.Highlight $src $lang "" }}
+</figure>

@@ -1,0 +1,114 @@
+# Builds, validates and deploys the site to GitHub Pages.
+#
+# - Pull requests: verify the Java examples and build the site (no deployment).
+# - Pushes to main and manual runs: the same checks, then deploy.
+#
+# One-time repository setup: Settings → Pages → Build and deployment →
+# Source: "GitHub Actions". See README.md, "Deploying to GitHub Pages".
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# Least privilege by default; jobs widen this only where needed.
+permissions:
+  contents: read
+
+# One deployment at a time; never cancel a deployment that is in progress.
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  HUGO_VERSION: 0.167.0
+  JAVA_VERSION: "21"
+
+jobs:
+  examples:
+    name: Verify code examples
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up Java
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: maven
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Compile and run plain-Java examples, compare output
+        run: python scripts/verify_java.py
+
+      - name: Build and test the Spring Boot example
+        working-directory: examples/spring-hexagonal-orders
+        run: mvn -B -ntp verify
+
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install Hugo
+        run: |
+          curl -sSL -o "${{ runner.temp }}/hugo.deb" \
+            "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb"
+          sudo dpkg -i "${{ runner.temp }}/hugo.deb"
+          hugo version
+
+      - name: Configure Pages
+        id: pages
+        # On pull requests from forks the Pages API may be unavailable; fall back below.
+        continue-on-error: ${{ github.event_name == 'pull_request' }}
+        uses: actions/configure-pages@v6
+
+      - name: Build
+        env:
+          HUGO_ENVIRONMENT: production
+          # Shows "Edit on GitHub", "View source" and repository links.
+          HUGO_PARAMS_REPOURL: ${{ github.server_url }}/${{ github.repository }}
+          BASE_URL: ${{ steps.pages.outputs.base_url }}
+        run: |
+          # base_url is e.g. https://owner.github.io/repo for project sites,
+          # or a custom domain. Hugo needs the trailing slash.
+          BASE_URL="${BASE_URL:-https://example.invalid}"
+          hugo --gc --minify --baseURL "${BASE_URL%/}/"
+          echo "BASE_PATH=$(python3 -c "import sys,urllib.parse;print(urllib.parse.urlsplit(sys.argv[1]).path or '/')" "${BASE_URL%/}/")" >> "$GITHUB_ENV"
+
+      - name: Check internal links and anchors
+        run: python3 scripts/check_links.py public --base-path "$BASE_PATH"
+
+      - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./public
+
+  deploy:
+    name: Deploy to GitHub Pages
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: [examples, build]
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v5

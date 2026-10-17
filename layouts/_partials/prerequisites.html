@@ -1,0 +1,14 @@
+{{- with .Params.prerequisites }}
+<aside class="prereqs" aria-label="Prerequisites">
+  <strong>Before you read:</strong>
+  {{- $links := slice }}
+  {{- range . }}
+    {{- with site.GetPage . }}
+      {{- $links = $links | append (printf "<a href=\"%s\">%s</a>" .RelPermalink (.LinkTitle | htmlEscape)) }}
+    {{- else }}
+      {{- errorf "Prerequisite %q in %s does not resolve to a page" . $.File.Path }}
+    {{- end }}
+  {{- end }}
+  {{ delimit $links ", " | safeHTML }}
+</aside>
+{{- end }}

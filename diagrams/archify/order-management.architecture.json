@@ -1,0 +1,272 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Order Management System — High-Level Architecture",
+    "locale": "en",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "clients",
+      "type": "frontend",
+      "label": "Clients",
+      "sublabel": "web + mobile",
+      "pos": [
+        30,
+        200
+      ],
+      "size": [
+        120,
+        64
+      ]
+    },
+    {
+      "id": "gateway",
+      "type": "security",
+      "label": "API Gateway",
+      "sublabel": "auth, rate limits",
+      "pos": [
+        250,
+        200
+      ],
+      "size": [
+        130,
+        64
+      ]
+    },
+    {
+      "id": "ordering",
+      "type": "backend",
+      "label": "Ordering",
+      "sublabel": "saga orchestrator",
+      "pos": [
+        480,
+        200
+      ],
+      "size": [
+        130,
+        64
+      ]
+    },
+    {
+      "id": "ordersdb",
+      "type": "database",
+      "label": "Orders DB",
+      "sublabel": "orders + outbox",
+      "pos": [
+        480,
+        40
+      ],
+      "size": [
+        130,
+        64
+      ]
+    },
+    {
+      "id": "broker",
+      "type": "messagebus",
+      "label": "Message Broker",
+      "sublabel": "at-least-once",
+      "pos": [
+        710,
+        200
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "inventory",
+      "type": "backend",
+      "label": "Inventory",
+      "sublabel": "reservations",
+      "pos": [
+        710,
+        40
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "invdb",
+      "type": "database",
+      "label": "Inventory DB",
+      "sublabel": "stock + outbox",
+      "pos": [
+        940,
+        40
+      ],
+      "size": [
+        130,
+        64
+      ]
+    },
+    {
+      "id": "payments",
+      "type": "backend",
+      "label": "Payments",
+      "sublabel": "idempotent charges",
+      "pos": [
+        940,
+        200
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "provider",
+      "type": "external",
+      "label": "Payment Provider",
+      "sublabel": "external API",
+      "pos": [
+        940,
+        360
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "notify",
+      "type": "backend",
+      "label": "Event Consumers",
+      "sublabel": "fulfilment, e-mail",
+      "pos": [
+        710,
+        360
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "fulfil",
+      "type": "external",
+      "label": "Shipping System",
+      "sublabel": "existing system",
+      "pos": [
+        710,
+        520
+      ],
+      "size": [
+        140,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Our services",
+      "wraps": [
+        "gateway",
+        "ordering",
+        "ordersdb",
+        "broker",
+        "inventory",
+        "invdb",
+        "payments",
+        "notify"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "place-order",
+      "from": "clients",
+      "to": "gateway",
+      "label": "HTTPS",
+      "variant": "emphasis"
+    },
+    {
+      "id": "route",
+      "from": "gateway",
+      "to": "ordering",
+      "label": "POST /orders",
+      "variant": "emphasis"
+    },
+    {
+      "id": "persist",
+      "from": "ordering",
+      "to": "ordersdb",
+      "label": "one local TX",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "relay",
+      "from": "ordering",
+      "to": "broker",
+      "label": "outbox relay",
+      "variant": "dashed"
+    },
+    {
+      "id": "reserve",
+      "from": "broker",
+      "to": "inventory",
+      "label": "ReserveStock",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "stock",
+      "from": "inventory",
+      "to": "invdb"
+    },
+    {
+      "id": "charge",
+      "from": "broker",
+      "to": "payments",
+      "label": "ChargePayment",
+      "variant": "dashed"
+    },
+    {
+      "id": "psp",
+      "from": "payments",
+      "to": "provider",
+      "label": "idempotency key",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        1010,
+        312
+      ]
+    },
+    {
+      "id": "events",
+      "from": "broker",
+      "to": "notify",
+      "label": "order events",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        780,
+        312
+      ]
+    },
+    {
+      "id": "ship",
+      "from": "notify",
+      "to": "fulfil",
+      "label": "create shipment",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        780,
+        472
+      ]
+    }
+  ]
+}

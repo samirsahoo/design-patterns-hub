@@ -1,0 +1,19 @@
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__about">
+      <p class="site-footer__title">{{ site.Title }}</p>
+      <p>{{ site.Params.tagline }}</p>
+    </div>
+    <ul class="site-footer__links">
+      {{- with site.GetPage "/about" }}<li><a href="{{ .RelPermalink }}">About &amp; conventions</a></li>{{ end }}
+      {{- with site.GetPage "/tags" }}<li><a href="{{ .RelPermalink }}">All tags</a></li>{{ end }}
+      <li><a href="{{ "index.xml" | relURL }}">RSS feed</a></li>
+      <li><a href="{{ "sitemap.xml" | relURL }}">Sitemap</a></li>
+      {{- with site.Params.repoURL }}
+      <li><a href="{{ . }}" rel="noopener">Source on GitHub</a></li>
+      <li><a href="{{ . }}/blob/{{ site.Params.repoBranch }}/CONTRIBUTING.md" rel="noopener">Contribute</a></li>
+      {{- end }}
+    </ul>
+    <p class="site-footer__license">Text licensed under <a href="https://creativecommons.org/licenses/by/4.0/" rel="license noopener">CC BY 4.0</a>; code examples under the MIT License. Java examples target Java {{ site.Params.javaVersion }} LTS.</p>
+  </div>
+</footer>

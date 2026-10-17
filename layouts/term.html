@@ -1,0 +1,12 @@
+{{ define "main" }}
+<div class="page-grid">
+  <div class="article article--section">
+    {{- partial "breadcrumbs.html" . }}
+    <header class="article__header">
+      <h1>Tagged “{{ .Title }}”</h1>
+      <p class="article__lede">{{ len .Pages }} {{ cond (eq (len .Pages) 1) "article" "articles" }} with this tag.</p>
+    </header>
+    {{- partial "page-cards.html" .Pages.ByTitle }}
+  </div>
+</div>
+{{ end }}

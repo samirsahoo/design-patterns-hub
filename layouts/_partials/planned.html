@@ -1,0 +1,14 @@
+{{- /* Topics that are part of the curriculum but not yet written. They are
+     rendered as plain text (never links) so no page looks finished when it
+     is not. Track progress in CONTENT-STATUS.md. */}}
+{{- with .Params.planned }}
+<section class="planned" aria-labelledby="planned-heading">
+  <h2 id="planned-heading">Planned topics</h2>
+  <p class="planned__note">These topics are on the roadmap and not written yet. They appear here so you can see the full scope of the section.</p>
+  <ul class="planned__list">
+    {{- range . }}
+    <li>{{ . | markdownify }}</li>
+    {{- end }}
+  </ul>
+</section>
+{{- end }}

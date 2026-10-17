@@ -1,0 +1,4 @@
+paid, transaction LP-1001
+declined: insufficient funds
+declined: card expired
+error: Payment provider rejected the request (cause: E-001 missing token)

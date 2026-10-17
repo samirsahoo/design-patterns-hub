@@ -1,0 +1,15 @@
+{{- $src := .Destination -}}
+{{- $u := urls.Parse $src -}}
+{{- if not $u.IsAbs -}}
+  {{- with .Page.Resources.Get $src -}}
+    {{- $src = .RelPermalink -}}
+  {{- else -}}
+    {{- if fileExists (path.Join "static" $u.Path) -}}
+      {{- $src = relURL (strings.TrimPrefix "/" $u.Path) -}}
+    {{- else -}}
+      {{- errorf "Missing image %q in %s" .Destination .Page.File.Path -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+<img src="{{ $src }}" alt="{{ .PlainText }}"{{ with .Title }} title="{{ . }}"{{ end }} loading="lazy" decoding="async">
+{{- /* trim */ -}}

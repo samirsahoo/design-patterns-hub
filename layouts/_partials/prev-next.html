@@ -1,0 +1,27 @@
+{{- /* Previous/next within the current section, in weight order. Computed
+     explicitly because Hugo's .Prev/.Next direction depends on default sort. */}}
+{{- $pages := .CurrentSection.RegularPages.ByWeight }}
+{{- $prev := false }}
+{{- $next := false }}
+{{- range $i, $p := $pages }}
+  {{- if eq $p.RelPermalink $.RelPermalink }}
+    {{- if gt $i 0 }}{{ $prev = index $pages (sub $i 1) }}{{ end }}
+    {{- if lt (add $i 1) (len $pages) }}{{ $next = index $pages (add $i 1) }}{{ end }}
+  {{- end }}
+{{- end }}
+{{- if or $prev $next }}
+<nav class="prev-next" aria-label="Previous and next articles">
+  {{- with $prev }}
+  <a class="prev-next__link prev-next__link--prev" href="{{ .RelPermalink }}" rel="prev">
+    <span class="prev-next__label">← Previous</span>
+    <span class="prev-next__title">{{ .LinkTitle }}</span>
+  </a>
+  {{- else }}<span></span>{{ end }}
+  {{- with $next }}
+  <a class="prev-next__link prev-next__link--next" href="{{ .RelPermalink }}" rel="next">
+    <span class="prev-next__label">Next →</span>
+    <span class="prev-next__title">{{ .LinkTitle }}</span>
+  </a>
+  {{- end }}
+</nav>
+{{- end }}

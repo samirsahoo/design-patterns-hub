@@ -1,0 +1,5 @@
+  [notify ana@example.com] Order {{any}} received
+Production wiring placed an order with a random id: true
+Placed ORD-1 at 2026-01-15T10:00:00Z
+Stored: true
+Notifications: [ben@example.com: Order ORD-1 received]

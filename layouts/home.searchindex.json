@@ -1,0 +1,20 @@
+{{- /* Static search index consumed by assets/js/main.js. Body text is
+     truncated to keep the index small as the site grows. */ -}}
+{{- $index := slice -}}
+{{- range site.RegularPages -}}
+  {{- if not .Params.excludeFromSearch -}}
+    {{- $headings := slice -}}
+    {{- range .Fragments.HeadingsMap -}}{{ $headings = $headings | append .Title }}{{- end -}}
+    {{- $body := .Plain | replaceRE `\s+` " " | truncate 6000 "" -}}
+    {{- $index = $index | append (dict
+      "t" .Title
+      "u" .RelPermalink
+      "s" (.Parent.LinkTitle | default "")
+      "d" (.Description | default "")
+      "g" (.Params.tags | default slice)
+      "h" $headings
+      "b" $body
+    ) -}}
+  {{- end -}}
+{{- end -}}
+{{- $index | jsonify -}}

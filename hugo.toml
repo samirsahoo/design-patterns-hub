@@ -1,0 +1,103 @@
+# Java & Software Architecture Knowledge Hub — Hugo configuration
+#
+# baseURL is overridden at build time in CI (see .github/workflows/deploy.yml),
+# which passes the correct GitHub Pages URL, including the project-site path
+# (https://<owner>.github.io/<repo>/). Keep every template and content link
+# relative to the site root so the same build works at "/" and at a sub-path.
+baseURL = "http://localhost:1313/"
+locale = "en-US"
+title = "Java & Software Architecture Knowledge Hub"
+enableRobotsTXT = true
+enableGitInfo = false
+summaryLength = 40
+timeZone = "UTC"
+
+[build]
+  [build.buildStats]
+    enable = false
+
+[pagination]
+  pagerSize = 50
+
+[taxonomies]
+  tag = "tags"
+
+[outputs]
+  home = ["html", "rss", "searchindex"]
+  section = ["html", "rss"]
+  page = ["html"]
+
+[outputFormats]
+  [outputFormats.searchindex]
+    mediaType = "application/json"
+    baseName = "search-index"
+    isPlainText = true
+    notAlternative = true
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      # Raw HTML in Markdown is disabled on purpose: content stays portable and
+      # presentation lives in templates and shortcodes.
+      unsafe = false
+    [markup.goldmark.parser]
+      [markup.goldmark.parser.attribute]
+        block = true
+        title = true
+    [markup.goldmark.extensions]
+      [markup.goldmark.extensions.typographer]
+        disable = false
+  [markup.highlight]
+    noClasses = false
+    lineNos = false
+    tabWidth = 4
+    guessSyntax = false
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 3
+    ordered = false
+
+[related]
+  includeNewer = true
+  threshold = 60
+  toLower = true
+  [[related.indices]]
+    name = "tags"
+    weight = 100
+  [[related.indices]]
+    name = "keywords"
+    weight = 80
+
+[sitemap]
+  changeFreq = "monthly"
+  priority = 0.5
+
+[params]
+  description = "An open handbook on Java, design patterns, software architecture, Domain-Driven Design, microservices, and system design — with diagrams, runnable Java examples, trade-offs, and interview questions."
+  tagline = "Understand the concepts. Explore the diagrams. Build better software."
+  # Set automatically in CI from the GitHub repository (HUGO_PARAMS_REPOURL).
+  # Leave empty locally to hide repository links, or set it to your repo URL.
+  repoURL = ""
+  repoBranch = "main"
+  javaVersion = "21"
+  springBootVersion = "4.1.1"
+  mermaidVersion = "11.17.2"
+  author = "Java & Software Architecture Knowledge Hub contributors"
+
+[menus]
+  [[menus.main]]
+    name = "Learning paths"
+    pageRef = "/learning-paths"
+    weight = 10
+  [[menus.main]]
+    name = "Glossary"
+    pageRef = "/glossary"
+    weight = 20
+  [[menus.main]]
+    name = "About"
+    pageRef = "/about"
+    weight = 30
+
+[security]
+  [security.funcs]
+    getenv = ["^HUGO_"]

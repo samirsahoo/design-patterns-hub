@@ -1,0 +1,35 @@
+{{- /* Explicit `related` front matter first (curated), then Hugo's tag-based
+     related content to fill up to five entries. */}}
+{{- $seen := slice .RelPermalink }}
+{{- $list := slice }}
+{{- range .Params.related }}
+  {{- with site.GetPage . }}
+    {{- if not (in $seen .RelPermalink) }}
+      {{- $list = $list | append . }}
+      {{- $seen = $seen | append .RelPermalink }}
+    {{- end }}
+  {{- else }}
+    {{- errorf "Related page %q in %s does not resolve to a page" . $.File.Path }}
+  {{- end }}
+{{- end }}
+{{- range site.RegularPages.Related . }}
+  {{- if and (lt (len $list) 5) (not (in $seen .RelPermalink)) }}
+    {{- $list = $list | append . }}
+    {{- $seen = $seen | append .RelPermalink }}
+  {{- end }}
+{{- end }}
+{{- with $list }}
+<section class="related" aria-labelledby="related-heading">
+  <h2 id="related-heading">Related articles</h2>
+  <ul class="card-list card-list--compact">
+    {{- range . }}
+    <li class="card">
+      <a class="card__link" href="{{ .RelPermalink }}">
+        <span class="card__eyebrow">{{ with .Parent }}{{ .LinkTitle }}{{ end }}</span>
+        <span class="card__title">{{ .LinkTitle }}</span>
+      </a>
+    </li>
+    {{- end }}
+  </ul>
+</section>
+{{- end }}

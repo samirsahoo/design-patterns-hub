@@ -1,0 +1,29 @@
+{{- /* Resolves internal links to pages so they work under any baseURL
+     (including GitHub Pages project sites) and fails the build on links to
+     pages that do not exist. Write internal links as content paths, e.g.
+     [Strategy](/design-patterns/behavioral/strategy) or
+     [SRP](/design-patterns/solid-principles#single-responsibility-principle). */ -}}
+{{- $u := urls.Parse .Destination -}}
+{{- $href := .Destination -}}
+{{- $external := false -}}
+{{- if or $u.IsAbs (hasPrefix .Destination "mailto:") -}}
+  {{- $external = true -}}
+{{- else if and (not $u.Path) $u.Fragment -}}
+  {{- /* same-page fragment: keep as-is */ -}}
+{{- else if $u.Path -}}
+  {{- $path := strings.TrimSuffix "/" $u.Path -}}
+  {{- with or (.Page.GetPage $path) (site.GetPage $path) -}}
+    {{- $href = .RelPermalink -}}
+  {{- else -}}
+    {{- $static := path.Join "static" $u.Path -}}
+    {{- if fileExists $static -}}
+      {{- $href = relURL (strings.TrimPrefix "/" $u.Path) -}}
+    {{- else -}}
+      {{- errorf "Broken internal link %q in %s" .Destination .Page.File.Path -}}
+    {{- end -}}
+  {{- end -}}
+  {{- with $u.RawQuery }}{{ $href = printf "%s?%s" $href . }}{{ end -}}
+  {{- with $u.Fragment }}{{ $href = printf "%s#%s" $href . }}{{ end -}}
+{{- end -}}
+<a href="{{ $href }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if $external }} rel="noopener"{{ end }}>{{ .Text }}</a>
+{{- /* trim trailing newline */ -}}

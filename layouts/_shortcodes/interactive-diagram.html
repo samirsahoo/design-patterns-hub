@@ -1,0 +1,15 @@
+{{- /* Links to a self-contained interactive diagram committed under
+     static/diagrams/ (for example, an Archify export). The page must still
+     explain the diagram in text and include a Mermaid version; this link is
+     an optional enhancement.
+     Usage: interactive-diagram file="order-management.html" title="…"
+            source="diagrams/archify/order-management.architecture.json" tool="Archify" */ -}}
+{{- $file := .Get "file" -}}
+{{- $static := path.Join "static/diagrams" $file -}}
+{{- if not (fileExists $static) }}{{ errorf "interactive-diagram in %s: %s not found" .Page.File.Path $static }}{{ end -}}
+{{- $source := .Get "source" -}}
+{{- with $source }}{{ if not (fileExists .) }}{{ errorf "interactive-diagram in %s: source %s not found" $.Page.File.Path . }}{{ end }}{{ end -}}
+<p class="interactive-diagram">
+  <a class="button" href="{{ printf "diagrams/%s" $file | relURL }}">Open the interactive diagram: {{ .Get "title" }}</a>
+  <span class="interactive-diagram__note">Standalone page with zoom, light/dark themes and SVG/PNG export{{ with .Get "tool" }}, generated with {{ . }}{{ end }}.{{ with $source }}{{ with site.Params.repoURL }} <a href="{{ . }}/blob/{{ site.Params.repoBranch }}/{{ $source }}" rel="noopener">Diagram source</a>.{{ end }}{{ end }}</span>
+</p>

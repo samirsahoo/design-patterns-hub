@@ -1,0 +1,11 @@
+# Normalise line endings to LF in the repository and working tree, on every OS.
+# Expected-output files are compared byte-for-byte by scripts/verify_java.py.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.ico binary
+
+# Vendored and generated files: exclude from diffs and language statistics.
+static/js/vendor/** -diff linguist-vendored
+static/diagrams/*.html -diff linguist-generated

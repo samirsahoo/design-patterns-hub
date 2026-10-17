@@ -1,0 +1,9 @@
+{{- with site.Params.repoURL }}
+  {{- with $.File }}
+<p class="page-footer">
+  Found a mistake or want to improve this page?
+  <a href="{{ site.Params.repoURL }}/edit/{{ site.Params.repoBranch }}/content/{{ .Path | replaceRE `\\` "/" }}" rel="noopener">Edit it on GitHub</a>
+  or <a href="{{ site.Params.repoURL }}/issues/new?title={{ printf "Feedback: %s" $.Title | urlquery }}" rel="noopener">open an issue</a>.
+</p>
+  {{- end }}
+{{- end }}

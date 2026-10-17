@@ -1,0 +1,43 @@
+{{- $p := .page }}
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:title" content="{{ $p.Title | default site.Title }}">
+<meta property="og:description" content="{{ .description }}">
+<meta property="og:url" content="{{ $p.Permalink }}">
+<meta property="og:type" content="{{ if $p.IsPage }}article{{ else }}website{{ end }}">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="{{ $p.Title | default site.Title }}">
+<meta name="twitter:description" content="{{ .description }}">
+{{- with $p.Params.tags }}
+<meta name="keywords" content="{{ delimit . ", " }}">
+{{- end }}
+{{- if $p.IsPage }}
+  {{- $reviewed := $p.Params.lastReviewed | default $p.Lastmod }}
+<script type="application/ld+json">
+{{- $article := dict
+  "@context" "https://schema.org"
+  "@type" "TechArticle"
+  "headline" $p.Title
+  "description" .description
+  "url" $p.Permalink
+  "inLanguage" "en"
+  "isAccessibleForFree" true
+  "author" (dict "@type" "Organization" "name" site.Params.author)
+  "publisher" (dict "@type" "Organization" "name" site.Title)
+}}
+{{- with $p.Params.lastReviewed }}{{ $article = merge $article (dict "dateModified" (time.Format "2006-01-02" .)) }}{{ end }}
+{{- with $p.Params.tags }}{{ $article = merge $article (dict "keywords" (delimit . ", ")) }}{{ end }}
+{{- with $p.Params.difficulty }}{{ $article = merge $article (dict "proficiencyLevel" (title .)) }}{{ end }}
+{{ $article | jsonify | safeJS }}
+</script>
+{{- end }}
+{{- if not $p.IsHome }}
+<script type="application/ld+json">
+{{- $items := slice }}
+{{- range $i, $a := $p.Ancestors.Reverse }}
+  {{- $items = $items | append (dict "@type" "ListItem" "position" (add $i 1) "name" ($a.LinkTitle | default site.Title) "item" $a.Permalink) }}
+{{- end }}
+{{- $items = $items | append (dict "@type" "ListItem" "position" (add (len $items) 1) "name" $p.LinkTitle "item" $p.Permalink) }}
+{{ dict "@context" "https://schema.org" "@type" "BreadcrumbList" "itemListElement" $items | jsonify | safeJS }}
+</script>
+{{- end }}

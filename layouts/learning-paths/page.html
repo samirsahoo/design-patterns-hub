@@ -1,0 +1,40 @@
+{{ define "main" }}
+<div class="page-grid">
+  <article class="article">
+    {{- partial "breadcrumbs.html" . }}
+    <header class="article__header">
+      <h1>{{ .Title }}</h1>
+      {{- with .Description }}<p class="article__lede">{{ . }}</p>{{ end }}
+      {{- $available := 0 }}
+      {{- range .Params.steps }}{{ with .page }}{{ $available = add $available 1 }}{{ end }}{{ end }}
+      <ul class="article-meta">
+        {{- with .Params.audience }}<li>For: {{ . }}</li>{{ end }}
+        <li>{{ len .Params.steps }} steps · {{ $available }} available now</li>
+      </ul>
+    </header>
+    {{- with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+    <ol class="path-steps">
+      {{- range $i, $s := .Params.steps }}
+      {{- $target := false }}
+      {{- with $s.page }}
+        {{- $target = site.GetPage . }}
+        {{- if not $target }}{{ errorf "Learning path %s: step page %q does not exist (use planned: true for unwritten steps)" $.File.Path . }}{{ end }}
+      {{- end }}
+      <li class="path-step{{ if not $target }} path-step--planned{{ end }}">
+        <span class="path-step__num" aria-hidden="true">{{ add $i 1 }}</span>
+        <div class="path-step__body">
+          <p class="path-step__title">
+            {{- with $target }}<a href="{{ .RelPermalink }}">{{ $s.title | default .LinkTitle }}</a>{{ else }}{{ $s.title }} <span class="badge badge--planned">Planned</span>{{ end }}
+          </p>
+          {{- with $s.why }}<p class="path-step__why">{{ . | markdownify }}</p>{{ end }}
+          {{- with $s.also }}
+          <p class="path-step__also">Also: {{ range $j, $a := . }}{{ if $j }}, {{ end }}{{ with site.GetPage $a }}<a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ else }}{{ errorf "Learning path %s: 'also' page %q does not exist" $.File.Path $a }}{{ end }}{{ end }}</p>
+          {{- end }}
+        </div>
+      </li>
+      {{- end }}
+    </ol>
+    {{- partial "prev-next.html" . }}
+  </article>
+</div>
+{{ end }}

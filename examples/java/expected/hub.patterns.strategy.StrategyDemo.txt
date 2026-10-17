@@ -1,0 +1,5 @@
+Subtotal: 120.00
+No discount          -> total 120.00
+10% off              -> total 108.00
+5.00 off 3+ items    -> total 115.00
+Weekend 5% (lambda)  -> total 114.00

@@ -1,0 +1,69 @@
+/* Syntax highlighting for Hugo's Chroma output (markup.highlight.noClasses = false).
+   A small hand-written palette driven by tokens so it follows the site theme. */
+:root {
+  --syn-keyword: #a626a4;
+  --syn-type: #0b6e8a;
+  --syn-func: #4057b5;
+  --syn-string: #2f7d32;
+  --syn-number: #b35c00;
+  --syn-comment: #6e7781;
+  --syn-annotation: #9a5b00;
+  --syn-operator: #57606b;
+  --syn-error: #b42318;
+  --syn-hl: rgba(255, 213, 79, .25);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --syn-keyword: #d197ec;
+    --syn-type: #6fd1e0;
+    --syn-func: #9cb7ff;
+    --syn-string: #a5d6a7;
+    --syn-number: #f6b26b;
+    --syn-comment: #8b97a5;
+    --syn-annotation: #f0c674;
+    --syn-operator: #b0bac6;
+    --syn-error: #f59a8f;
+    --syn-hl: rgba(255, 213, 79, .12);
+  }
+}
+:root[data-theme="dark"] {
+  --syn-keyword: #d197ec;
+  --syn-type: #6fd1e0;
+  --syn-func: #9cb7ff;
+  --syn-string: #a5d6a7;
+  --syn-number: #f6b26b;
+  --syn-comment: #8b97a5;
+  --syn-annotation: #f0c674;
+  --syn-operator: #b0bac6;
+  --syn-error: #f59a8f;
+  --syn-hl: rgba(255, 213, 79, .12);
+}
+.chroma { color: var(--code-text); }
+.chroma .err { color: var(--syn-error); }
+.chroma .hl { display: block; background: var(--syn-hl); }
+.chroma .ln, .chroma .lnt { color: var(--syn-comment); margin-right: .8em; user-select: none; }
+/* keywords */
+.chroma .k, .chroma .kc, .chroma .kd, .chroma .kn, .chroma .kp, .chroma .kr { color: var(--syn-keyword); }
+.chroma .kt { color: var(--syn-type); }
+/* names */
+.chroma .nc, .chroma .nn, .chroma .ne, .chroma .bp { color: var(--syn-type); }
+.chroma .nf, .chroma .fm { color: var(--syn-func); }
+.chroma .nd, .chroma .na { color: var(--syn-annotation); }
+.chroma .nt { color: var(--syn-keyword); }
+.chroma .nb { color: var(--syn-type); }
+/* literals */
+.chroma .s, .chroma .sa, .chroma .sb, .chroma .sc, .chroma .dl, .chroma .sd, .chroma .s2,
+.chroma .se, .chroma .sh, .chroma .si, .chroma .sx, .chroma .sr, .chroma .s1, .chroma .ss { color: var(--syn-string); }
+.chroma .m, .chroma .mb, .chroma .mf, .chroma .mh, .chroma .mi, .chroma .il, .chroma .mo { color: var(--syn-number); }
+/* comments */
+.chroma .c, .chroma .ch, .chroma .cm, .chroma .c1, .chroma .cs, .chroma .cp, .chroma .cpf { color: var(--syn-comment); font-style: italic; }
+/* operators & punctuation */
+.chroma .o, .chroma .ow { color: var(--syn-operator); }
+/* generic (diff, shell output) */
+.chroma .gd { color: var(--syn-error); }
+.chroma .gi { color: var(--syn-string); }
+.chroma .gh, .chroma .gu { color: var(--syn-func); font-weight: 600; }
+.chroma .gp { color: var(--syn-comment); user-select: none; }
+.chroma .go { color: var(--syn-operator); }
+.chroma .ge { font-style: italic; }
+.chroma .gs { font-weight: 700; }

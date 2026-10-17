@@ -1,0 +1,7 @@
+== q3-sales.csv
+region,units
+EMEA,120
+APAC,75
+== q3-sales.json
+[{"region":"EMEA","units":120},{"region":"APAC","units":75}]
+Simple factory chose: CsvReportWriter

@@ -1,0 +1,11 @@
+<ul class="card-list">
+  {{- range . }}
+  <li class="card">
+    <a class="card__link" href="{{ .RelPermalink }}">
+      <span class="card__title">{{ .LinkTitle }}</span>
+      {{- with .Description }}<span class="card__desc">{{ . }}</span>{{ end }}
+      <span class="card__meta">{{ with .Params.difficulty }}{{ title . }} · {{ end }}{{ .ReadingTime }} min read</span>
+    </a>
+  </li>
+  {{- end }}
+</ul>

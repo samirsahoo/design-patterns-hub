@@ -1,0 +1,14 @@
+{{- /* Section tree navigation. Sections are ordered by weight; the branch that
+     contains the current page is expanded. Pure HTML: works without JS. */}}
+<nav id="sidebar" class="sidebar" aria-label="Topics">
+  <div class="sidebar__inner">
+    <ul class="nav-tree">
+      {{- range site.Home.Sections.ByWeight }}
+        {{- if not .Params.hideInNav }}
+        {{- partial "nav-node.html" (dict "node" . "current" $ "depth" 0) }}
+        {{- end }}
+      {{- end }}
+    </ul>
+  </div>
+</nav>
+<div class="sidebar-backdrop" hidden></div>

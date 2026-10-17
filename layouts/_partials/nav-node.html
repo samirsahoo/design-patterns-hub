@@ -1,0 +1,26 @@
+{{- $node := .node }}
+{{- $current := .current }}
+{{- $isCurrent := eq $node.RelPermalink $current.RelPermalink }}
+{{- $inBranch := or $isCurrent ($current.IsDescendant $node) }}
+{{- $children := $node.Pages.ByWeight }}
+<li class="nav-tree__item{{ if $inBranch }} is-active-branch{{ end }}">
+  {{- if $children }}
+  <details{{ if $inBranch }} open{{ end }}>
+    <summary>
+      <a href="{{ $node.RelPermalink }}"{{ if $isCurrent }} aria-current="page"{{ end }}>{{ $node.LinkTitle }}</a>
+    </summary>
+    <ul>
+      {{- range $children }}
+        {{- if .IsSection }}
+          {{- partial "nav-node.html" (dict "node" . "current" $current "depth" (add $.depth 1)) }}
+        {{- else }}
+          {{- $here := eq .RelPermalink $current.RelPermalink }}
+      <li class="nav-tree__item"><a href="{{ .RelPermalink }}"{{ if $here }} aria-current="page"{{ end }}>{{ .LinkTitle }}</a></li>
+        {{- end }}
+      {{- end }}
+    </ul>
+  </details>
+  {{- else }}
+  <a class="nav-tree__leaf" href="{{ $node.RelPermalink }}"{{ if $isCurrent }} aria-current="page"{{ end }}>{{ $node.LinkTitle }}</a>
+  {{- end }}
+</li>

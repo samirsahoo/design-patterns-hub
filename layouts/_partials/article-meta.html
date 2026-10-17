@@ -1,0 +1,18 @@
+{{- $p := . }}
+<ul class="article-meta" aria-label="Article details">
+  {{- with .Params.difficulty }}
+  <li><span class="badge badge--{{ . | urlize }}">{{ title . }}</span></li>
+  {{- end }}
+  <li>{{ .ReadingTime }} min read</li>
+  {{- with .Params.javaVersion }}
+  <li>Java {{ . }}</li>
+  {{- end }}
+  {{- with .Params.lastReviewed }}
+  <li>Reviewed <time datetime="{{ time.Format "2006-01-02" . }}">{{ time.Format "January 2, 2006" . }}</time></li>
+  {{- end }}
+  {{- with .GetTerms "tags" }}
+  <li class="article-meta__tags">
+    {{- range . }}<a class="tag" href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a>{{ end }}
+  </li>
+  {{- end }}
+</ul>

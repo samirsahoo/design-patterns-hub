@@ -1,0 +1,32 @@
+{{ define "main" }}
+{{- $showToc := and (ne .Params.toc false) (gt (len .Fragments.Headings) 0) (in (string .TableOfContents) "<li>") }}
+<div class="page-grid{{ if $showToc }} has-toc{{ end }}">
+  <article class="article" itemscope itemtype="https://schema.org/TechArticle">
+    {{- partial "breadcrumbs.html" . }}
+    <header class="article__header">
+      <h1 itemprop="headline">{{ .Title }}</h1>
+      {{- with .Description }}<p class="article__lede" itemprop="description">{{ . }}</p>{{ end }}
+      {{- partial "article-meta.html" . }}
+    </header>
+    {{- partial "prerequisites.html" . }}
+    {{- if $showToc }}
+    <details class="toc toc--inline">
+      <summary>On this page</summary>
+      {{ .TableOfContents | replaceRE ` id="TableOfContents"` "" | safeHTML }}
+    </details>
+    {{- end }}
+    <div class="prose" itemprop="articleBody">
+      {{ .Content }}
+    </div>
+    {{- partial "related.html" . }}
+    {{- partial "page-footer.html" . }}
+    {{- partial "prev-next.html" . }}
+  </article>
+  {{- if $showToc }}
+  <aside class="toc toc--side" aria-label="On this page">
+    <p class="toc__title">On this page</p>
+    {{ .TableOfContents }}
+  </aside>
+  {{- end }}
+</div>
+{{ end }}

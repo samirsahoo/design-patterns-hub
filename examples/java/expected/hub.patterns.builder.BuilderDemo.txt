@@ -1,0 +1,22 @@
+SearchQuery[text=laptop, category=computers, min=500, max=1500, sort=PRICE_ASC, pageSize=20]
+SearchQuery[text=usb cable, sort=RELEVANCE, pageSize=20]
+Rejected: pageSize must be between 1 and 100
+# Release 2.4.0
+
+## New features
+- Export to JSON
+- Dark mode
+
+## Bug fixes
+- Fix rounding in totals
+
+<h1>Release 2.4.0</h1>
+<h2>New features</h2>
+<ul>
+  <li>Export to JSON</li>
+  <li>Dark mode</li>
+</ul>
+<h2>Bug fixes</h2>
+<ul>
+  <li>Fix rounding in totals</li>
+</ul>

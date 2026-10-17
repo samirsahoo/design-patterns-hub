@@ -1,0 +1,25 @@
+{{- /* Callouts use the GitHub/Obsidian alert syntax so content stays plain
+     Markdown:   > [!INTERVIEW] Optional title
+     Supported types are listed in $labels; unknown types fall back to a note. */ -}}
+{{- $labels := dict
+  "note" "Note"
+  "tip" "Tip"
+  "key" "Key concept"
+  "interview" "Interview tip"
+  "mistake" "Common mistake"
+  "tradeoff" "Trade-off"
+  "version" "Version note"
+  "warning" "Warning"
+  "important" "Important"
+  "caution" "Caution"
+-}}
+{{- if eq .Type "alert" -}}
+  {{- $type := .AlertType -}}
+  {{- if not (index $labels $type) }}{{ warnf "Unknown callout type %q in %s" $type .Page.File.Path }}{{ $type = "note" }}{{ end -}}
+<aside class="callout callout--{{ $type }}" role="note">
+  <p class="callout__title"><span class="callout__label">{{ index $labels $type }}</span>{{ with .AlertTitle }}<span class="callout__heading">{{ . }}</span>{{ end }}</p>
+  <div class="callout__body">{{ .Text }}</div>
+</aside>
+{{- else -}}
+<blockquote>{{ .Text }}</blockquote>
+{{- end -}}
