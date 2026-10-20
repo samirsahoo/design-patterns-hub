@@ -193,31 +193,7 @@ node scripts/check_render.mjs http://localhost:1313/ --width 1440   # desktop
 After changing an example's behaviour on purpose, regenerate its expected output with
 `python scripts/verify_java.py --update` and review the diff.
 
-## Deploying to GitHub Pages
 
-The workflow `.github/workflows/deploy.yml`:
-
-- runs on pushes to `main`, on pull requests (build and checks only) and manually
-  (**Actions → Build and deploy → Run workflow**);
-- verifies the Java and Spring examples;
-- builds with Hugo using the base URL that GitHub Pages reports, so both
-  `https://<owner>.github.io/<repo>/` project sites and custom domains work;
-- checks links and anchors in the built site;
-- deploys with the official `actions/upload-pages-artifact` and `actions/deploy-pages`
-  actions, using only the permissions each job needs. No secrets are required.
-
-One-time setup:
-
-1. Push the repository to GitHub with `main` as the default branch.
-2. In the repository, open **Settings → Pages**.
-3. Under **Build and deployment → Source**, choose **GitHub Actions**.
-4. Open **Settings → Actions → General** and make sure actions are allowed for the
-   repository.
-5. Push to `main` (or run the workflow manually). The deploy job prints the site URL,
-   which also appears under **Settings → Pages**.
-
-For a custom domain, set it under **Settings → Pages → Custom domain**; the workflow
-picks up the new base URL automatically on the next run.
 
 ## Contributing
 
