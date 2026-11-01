@@ -136,6 +136,8 @@ Sequential IDs give guessable codes (`3Fq9Zk`, `3Fq9Zl`...). To prevent enumerat
 
 ## High-level architecture
 
+{{< interactive-diagram file="url-shortener.html" title="URL shortener architecture" source="diagrams/archify/url-shortener.architecture.json" tool="Archify" >}}
+
 ```mermaid {title="URL shortener architecture"}
 flowchart LR
     U((Users)) --> CDN[CDN / edge<br/>optional redirect cache]

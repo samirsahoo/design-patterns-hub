@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Chat System — High-Level Architecture",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "views": [
+      { "id": "send-path", "label": "Send path", "focus": ["clients", "lb", "gateway", "chat", "msgdb"], "note": "A message travels over the WebSocket to the message service and is appended to the store." },
+      { "id": "delivery", "label": "Delivery", "focus": ["chat", "broker", "gateway", "push", "presence"], "note": "Online recipients get the message through their gateway; offline ones get a push notification." }
+    ]
+  },
+  "components": [
+    { "id": "clients", "type": "frontend", "label": "Clients", "sublabel": "mobile + web", "pos": [40, 260], "size": [130, 64] },
+    { "id": "media", "type": "cloud", "label": "Media store", "sublabel": "object store + CDN", "pos": [250, 80], "size": [150, 64] },
+    { "id": "lb", "type": "cloud", "label": "Load balancer", "sublabel": "L4, sticky by conn", "pos": [250, 260], "size": [150, 64] },
+    { "id": "gateway", "type": "backend", "label": "Chat gateways", "sublabel": "WebSocket sessions", "pos": [480, 260], "size": [150, 64] },
+    { "id": "presence", "type": "database", "label": "Session registry", "sublabel": "Redis: user → gateway", "pos": [480, 80], "size": [150, 64] },
+    { "id": "chat", "type": "backend", "label": "Message service", "sublabel": "IDs, ordering, fan-out", "pos": [710, 260], "size": [160, 64] },
+    { "id": "msgdb", "type": "database", "label": "Message store", "sublabel": "Cassandra / ScyllaDB", "pos": [950, 260], "size": [160, 64] },
+    { "id": "broker", "type": "messagebus", "label": "Event bus", "sublabel": "Kafka, per-chat key", "pos": [710, 440], "size": [160, 64] },
+    { "id": "push", "type": "external", "label": "Push services", "sublabel": "APNs / FCM", "pos": [950, 440], "size": [160, 64] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Chat platform", "wraps": ["lb", "gateway", "presence", "chat", "msgdb", "broker"] }
+  ],
+  "connections": [
+    { "id": "wss", "from": "clients", "to": "lb", "label": "WSS", "variant": "emphasis" },
+    { "id": "upload", "from": "clients", "to": "media", "label": "upload media", "variant": "dashed", "fromSide": "top", "toSide": "left" },
+    { "id": "lb-gw", "from": "lb", "to": "gateway" },
+    { "id": "register", "from": "gateway", "to": "presence", "label": "register session", "fromSide": "top", "toSide": "bottom" },
+    { "id": "send", "from": "gateway", "to": "chat", "label": "send message", "variant": "emphasis" },
+    { "id": "append", "from": "chat", "to": "msgdb", "label": "append" },
+    { "id": "fanout", "from": "chat", "to": "broker", "label": "message event", "variant": "dashed", "fromSide": "bottom", "toSide": "top", "labelDy": 24 },
+    { "id": "deliver", "from": "broker", "to": "gateway", "label": "deliver online", "variant": "dashed", "fromSide": "left", "toSide": "bottom" },
+    { "id": "notify", "from": "broker", "to": "push", "label": "offline: notify", "variant": "dashed" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Connections", "items": ["Persistent WebSocket per device", "Session registry maps users to gateways"] },
+    { "dot": "emerald", "title": "Messages", "items": ["Partitioned by chat ID, ordered by time-sortable ID", "Store first, then fan out"] },
+    { "dot": "amber", "title": "Delivery", "items": ["Online: push over the socket", "Offline: notify, client syncs on reconnect"] }
+  ]
+}

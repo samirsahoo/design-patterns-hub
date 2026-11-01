@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "CQRS with Event Sourcing",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1080,
+      640
+    ]
+  },
+  "stages": [
+    {
+      "label": "Commands"
+    },
+    {
+      "label": "Write model"
+    },
+    {
+      "label": "Events"
+    },
+    {
+      "label": "Read models"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "ui",
+      "type": "frontend",
+      "label": "Client",
+      "sublabel": "commands + queries",
+      "stage": 0,
+      "row": 1
+    },
+    {
+      "id": "handler",
+      "type": "backend",
+      "label": "Command handler",
+      "sublabel": "validate intent",
+      "stage": 1,
+      "row": 0
+    },
+    {
+      "id": "agg",
+      "type": "backend",
+      "label": "Aggregate",
+      "sublabel": "rebuild from events",
+      "stage": 1,
+      "row": 2
+    },
+    {
+      "id": "store",
+      "type": "database",
+      "label": "Event store",
+      "sublabel": "append-only stream",
+      "stage": 2,
+      "row": 0
+    },
+    {
+      "id": "bus",
+      "type": "messagebus",
+      "label": "Event bus",
+      "sublabel": "subscriptions",
+      "stage": 2,
+      "row": 2
+    },
+    {
+      "id": "proj",
+      "type": "backend",
+      "label": "Projectors",
+      "sublabel": "idempotent",
+      "stage": 3,
+      "row": 0
+    },
+    {
+      "id": "view",
+      "type": "database",
+      "label": "Read views",
+      "sublabel": "SQL, search, cache",
+      "stage": 3,
+      "row": 2
+    }
+  ],
+  "flows": [
+    {
+      "from": "ui",
+      "to": "handler",
+      "label": "PlaceOrder",
+      "variant": "emphasis"
+    },
+    {
+      "from": "handler",
+      "to": "agg",
+      "label": "load + decide",
+      "labelDy": 24,
+      "variant": "emphasis"
+    },
+    {
+      "from": "agg",
+      "to": "store",
+      "label": "append events",
+      "variant": "emphasis"
+    },
+    {
+      "from": "store",
+      "to": "bus",
+      "label": "publish",
+      "labelDy": 24,
+      "variant": "dashed"
+    },
+    {
+      "from": "bus",
+      "to": "proj",
+      "label": "OrderPlaced",
+      "variant": "dashed"
+    },
+    {
+      "from": "proj",
+      "to": "view",
+      "label": "update",
+      "labelDy": 24,
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Write side",
+      "items": [
+        "Commands express intent, may be rejected",
+        "Events are facts, never updated"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Read side",
+      "items": [
+        "One or more views per query need",
+        "Rebuild a view by replaying events"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Trade-off",
+      "items": [
+        "Read views are eventually consistent",
+        "Version events for schema evolution"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Flash Sale — Absorbing a Traffic Spike",
+    "locale": "en",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "users",
+      "type": "frontend",
+      "label": "Users",
+      "sublabel": "millions at T0",
+      "pos": [
+        40,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "cdn",
+      "type": "cloud",
+      "label": "CDN",
+      "sublabel": "static page",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "gw",
+      "type": "security",
+      "label": "Gateway",
+      "sublabel": "rate limit, bots",
+      "pos": [
+        280,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "svc",
+      "type": "backend",
+      "label": "Sale service",
+      "sublabel": "eligibility",
+      "pos": [
+        520,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "stock",
+      "type": "database",
+      "label": "Stock counter",
+      "sublabel": "Redis DECR / Lua",
+      "pos": [
+        520,
+        80
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "queue",
+      "type": "messagebus",
+      "label": "Order queue",
+      "sublabel": "Kafka",
+      "pos": [
+        760,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "orders",
+      "type": "backend",
+      "label": "Order workers",
+      "sublabel": "create orders",
+      "pos": [
+        1000,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "db",
+      "type": "database",
+      "label": "Orders DB",
+      "sublabel": "source of truth",
+      "pos": [
+        1000,
+        440
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "pay",
+      "type": "external",
+      "label": "Payments",
+      "sublabel": "pay within 10 min",
+      "pos": [
+        760,
+        440
+      ],
+      "size": [
+        150,
+        64
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "f1",
+      "from": "users",
+      "to": "cdn",
+      "label": "page",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "f2",
+      "from": "users",
+      "to": "gw",
+      "label": "buy",
+      "variant": "emphasis"
+    },
+    {
+      "id": "f3",
+      "from": "gw",
+      "to": "svc",
+      "label": "admitted",
+      "variant": "emphasis"
+    },
+    {
+      "id": "f4",
+      "from": "svc",
+      "to": "stock",
+      "label": "reserve",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "f5",
+      "from": "svc",
+      "to": "queue",
+      "label": "enqueue",
+      "variant": "dashed"
+    },
+    {
+      "id": "f6",
+      "from": "queue",
+      "to": "orders",
+      "label": "consume",
+      "variant": "dashed"
+    },
+    {
+      "id": "f7",
+      "from": "orders",
+      "to": "db",
+      "label": "persist",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 24,
+      "labelDx": 36
+    },
+    {
+      "id": "f8",
+      "from": "orders",
+      "to": "pay",
+      "label": "checkout",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "right"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Shield",
+      "items": [
+        "Static content on CDN",
+        "Rate limits, CAPTCHA, per-user caps"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "No overselling",
+      "items": [
+        "Atomic decrement in Redis",
+        "Reservation expires if unpaid"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Async",
+      "items": [
+        "Queue levels the spike",
+        "Users poll or get notified of outcome"
+      ]
+    }
+  ]
+}

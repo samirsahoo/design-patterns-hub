@@ -1,0 +1,204 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Distributed Key-Value Store — Dynamo-Style",
+    "locale": "en",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "client",
+      "type": "frontend",
+      "label": "Client",
+      "sublabel": "get / put",
+      "pos": [
+        40,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "coord",
+      "type": "backend",
+      "label": "Coordinator",
+      "sublabel": "any node",
+      "pos": [
+        280,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "ring",
+      "type": "cloud",
+      "label": "Hash ring",
+      "sublabel": "vnodes, N = 3",
+      "pos": [
+        520,
+        80
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "a",
+      "type": "database",
+      "label": "Replica A",
+      "sublabel": "memtable + SSTables",
+      "pos": [
+        520,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "b",
+      "type": "database",
+      "label": "Replica B",
+      "sublabel": "memtable + SSTables",
+      "pos": [
+        760,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "c",
+      "type": "database",
+      "label": "Replica C",
+      "sublabel": "memtable + SSTables",
+      "pos": [
+        1000,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "gossip",
+      "type": "cloud",
+      "label": "Gossip",
+      "sublabel": "membership, failure",
+      "pos": [
+        760,
+        440
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "hint",
+      "type": "database",
+      "label": "Hinted handoff",
+      "sublabel": "writes for down node",
+      "pos": [
+        1000,
+        80
+      ],
+      "size": [
+        150,
+        64
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "k1",
+      "from": "client",
+      "to": "coord",
+      "label": "put(k, v)",
+      "variant": "emphasis"
+    },
+    {
+      "id": "k2",
+      "from": "coord",
+      "to": "ring",
+      "label": "preference list",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "k3",
+      "from": "coord",
+      "to": "a",
+      "label": "write",
+      "variant": "emphasis"
+    },
+    {
+      "id": "k4",
+      "from": "a",
+      "to": "b",
+      "label": "replicate"
+    },
+    {
+      "id": "k5",
+      "from": "b",
+      "to": "c",
+      "label": "replicate"
+    },
+    {
+      "id": "k6",
+      "from": "c",
+      "to": "hint",
+      "label": "if down",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "k7",
+      "from": "b",
+      "to": "gossip",
+      "label": "heartbeats",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 24
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Partitioning",
+      "items": [
+        "Consistent hashing with virtual nodes",
+        "Key stored on next N distinct nodes"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Quorums",
+      "items": [
+        "W + R > N for overlap",
+        "Read repair and Merkle-tree anti-entropy"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Availability",
+      "items": [
+        "Sloppy quorum + hinted handoff",
+        "Vector clocks or LWW for conflicts"
+      ]
+    }
+  ]
+}

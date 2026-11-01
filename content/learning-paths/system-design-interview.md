@@ -42,6 +42,18 @@ steps:
     page: /system-design/case-studies/url-shortener
     also: [/system-design/case-studies/rate-limiter, /system-design/case-studies/payment-system, /system-design/case-studies/proximity-service, /system-design/building-blocks/unique-id-generation]
     why: "Practise the framework on systems with different bottlenecks."
+  - title: "Real-time and social systems: chat, news feed, notifications, collaborative editing"
+    page: /system-design/case-studies/chat-system
+    also: [/system-design/case-studies/news-feed, /system-design/case-studies/notification-service, /system-design/case-studies/collaborative-editing]
+    why: "Persistent connections, fan-out and convergence of concurrent edits."
+  - title: "Data-heavy systems: video, crawler, autocomplete, file sync, metrics"
+    page: /system-design/case-studies/video-streaming
+    also: [/system-design/case-studies/web-crawler, /system-design/case-studies/search-autocomplete, /system-design/case-studies/file-storage-sync, /system-design/case-studies/metrics-monitoring, /system-design/building-blocks/probabilistic-data-structures]
+    why: "Pipelines, object storage, tries, Bloom filters and time-series data."
+  - title: "Infrastructure and extreme-scale systems: key-value store, stock exchange, ride sharing, flash sale"
+    page: /system-design/case-studies/distributed-key-value-store
+    also: [/system-design/case-studies/stock-exchange, /system-design/case-studies/ride-sharing, /system-design/case-studies/flash-sale]
+    why: "Quorums, determinism, moving geospatial data and traffic spikes."
 ---
 
 Practise each case study out loud with a timer, and spend the first third of the time on requirements and estimates.

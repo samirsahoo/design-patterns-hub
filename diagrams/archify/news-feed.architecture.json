@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "News Feed — Hybrid Fan-out Architecture",
+    "locale": "en",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "clients",
+      "type": "frontend",
+      "label": "Clients",
+      "sublabel": "app + web",
+      "pos": [
+        40,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "gw",
+      "type": "security",
+      "label": "API gateway",
+      "sublabel": "auth, rate limits",
+      "pos": [
+        280,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "post",
+      "type": "backend",
+      "label": "Post service",
+      "sublabel": "write API",
+      "pos": [
+        520,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "postdb",
+      "type": "database",
+      "label": "Post store",
+      "sublabel": "posts by ID",
+      "pos": [
+        520,
+        80
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "bus",
+      "type": "messagebus",
+      "label": "Kafka",
+      "sublabel": "PostCreated",
+      "pos": [
+        520,
+        440
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "fanout",
+      "type": "backend",
+      "label": "Fan-out workers",
+      "sublabel": "push to followers",
+      "pos": [
+        760,
+        440
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "graph",
+      "type": "database",
+      "label": "Social graph",
+      "sublabel": "followers",
+      "pos": [
+        1000,
+        440
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "cache",
+      "type": "database",
+      "label": "Timeline cache",
+      "sublabel": "Redis lists of IDs",
+      "pos": [
+        760,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "feed",
+      "type": "backend",
+      "label": "Feed service",
+      "sublabel": "merge + rank",
+      "pos": [
+        1000,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "c1",
+      "from": "clients",
+      "to": "gw",
+      "label": "HTTPS",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c2",
+      "from": "gw",
+      "to": "post",
+      "label": "create post",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c3",
+      "from": "post",
+      "to": "postdb",
+      "label": "store",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "c4",
+      "from": "post",
+      "to": "bus",
+      "label": "event",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 24
+    },
+    {
+      "id": "c5",
+      "from": "bus",
+      "to": "fanout",
+      "label": "consume",
+      "variant": "dashed"
+    },
+    {
+      "id": "c6",
+      "from": "fanout",
+      "to": "graph",
+      "label": "followers"
+    },
+    {
+      "id": "c7",
+      "from": "fanout",
+      "to": "cache",
+      "label": "push IDs",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "c8",
+      "from": "feed",
+      "to": "cache",
+      "label": "read",
+      "fromSide": "left",
+      "toSide": "right"
+    },
+    {
+      "id": "c9",
+      "from": "feed",
+      "to": "postdb",
+      "label": "hydrate + celebs",
+      "fromSide": "top",
+      "toSide": "right"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Write path",
+      "items": [
+        "Post stored once, event published",
+        "Workers push post IDs to followers' timelines"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Celebrities",
+      "items": [
+        "No fan-out for huge accounts",
+        "Their posts are pulled and merged at read time"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Read path",
+      "items": [
+        "Timeline = cached IDs + celebrity pull",
+        "Hydrate posts, rank, paginate by cursor"
+      ]
+    }
+  ]
+}

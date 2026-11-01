@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Payment System — Pay-in Flow",
+    "locale": "en",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "checkout",
+      "type": "frontend",
+      "label": "Checkout",
+      "sublabel": "payment event",
+      "pos": [
+        40,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "ps",
+      "type": "backend",
+      "label": "Payment service",
+      "sublabel": "orchestrates",
+      "pos": [
+        280,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "pdb",
+      "type": "database",
+      "label": "Payments DB",
+      "sublabel": "orders, keys",
+      "pos": [
+        280,
+        80
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "exec",
+      "type": "backend",
+      "label": "Executor",
+      "sublabel": "per payment order",
+      "pos": [
+        520,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "psp",
+      "type": "external",
+      "label": "PSP",
+      "sublabel": "hosted page",
+      "pos": [
+        760,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "wallet",
+      "type": "backend",
+      "label": "Wallet",
+      "sublabel": "seller balances",
+      "pos": [
+        280,
+        440
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "ledger",
+      "type": "database",
+      "label": "Ledger",
+      "sublabel": "double entry",
+      "pos": [
+        520,
+        440
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "recon",
+      "type": "backend",
+      "label": "Reconciliation",
+      "sublabel": "nightly",
+      "pos": [
+        760,
+        440
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "bank",
+      "type": "external",
+      "label": "Settlement files",
+      "sublabel": "PSP / banks",
+      "pos": [
+        1000,
+        440
+      ],
+      "size": [
+        150,
+        64
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "p1",
+      "from": "checkout",
+      "to": "ps",
+      "label": "pay",
+      "variant": "emphasis"
+    },
+    {
+      "id": "p2",
+      "from": "ps",
+      "to": "pdb",
+      "label": "store",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "p3",
+      "from": "ps",
+      "to": "exec",
+      "label": "execute",
+      "variant": "emphasis"
+    },
+    {
+      "id": "p4",
+      "from": "exec",
+      "to": "psp",
+      "label": "charge (key)",
+      "variant": "security"
+    },
+    {
+      "id": "p5",
+      "from": "ps",
+      "to": "wallet",
+      "label": "credit",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 24
+    },
+    {
+      "id": "p6",
+      "from": "wallet",
+      "to": "ledger",
+      "label": "post"
+    },
+    {
+      "id": "p7",
+      "from": "recon",
+      "to": "ledger",
+      "label": "compare",
+      "fromSide": "left",
+      "toSide": "right"
+    },
+    {
+      "id": "p8",
+      "from": "bank",
+      "to": "recon",
+      "label": "files",
+      "fromSide": "left",
+      "toSide": "right"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Exactly once",
+      "items": [
+        "Retries give at-least-once",
+        "Idempotency keys give at-most-once"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Books",
+      "items": [
+        "Append-only double-entry ledger",
+        "Balances derived from entries"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Reconcile",
+      "items": [
+        "Match ledger to settlement files",
+        "Classify and resolve breaks"
+      ]
+    }
+  ]
+}

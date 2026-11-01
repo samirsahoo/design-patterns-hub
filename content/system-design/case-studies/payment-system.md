@@ -100,6 +100,8 @@ Amounts are decimals in strings (or integers in minor units), never floating poi
 
 ## High-level architecture
 
+{{< interactive-diagram file="payment-system.html" title="Payment system pay-in flow" source="diagrams/archify/payment-system.architecture.json" tool="Archify" >}}
+
 ```mermaid {title="Payment system: pay-in flow"}
 flowchart LR
     U((Buyer)) --> CO[Checkout / order service]

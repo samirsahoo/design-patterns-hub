@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Collaborative Editing — Operational Transformation",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1080,
+      560
+    ],
+    "column_fit": "spread"
+  },
+  "participants": [
+    {
+      "id": "alice",
+      "type": "frontend",
+      "label": "Alice",
+      "sublabel": "editor client"
+    },
+    {
+      "id": "server",
+      "type": "backend",
+      "label": "Collab service",
+      "sublabel": "OT, revision log"
+    },
+    {
+      "id": "log",
+      "type": "database",
+      "label": "Op log",
+      "sublabel": "doc revisions"
+    },
+    {
+      "id": "bob",
+      "type": "frontend",
+      "label": "Bob",
+      "sublabel": "editor client"
+    }
+  ],
+  "messages": [
+    {
+      "id": "m1",
+      "from": "alice",
+      "to": "server",
+      "y": 170,
+      "label": "insert('X', pos 0) @rev7",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m2",
+      "from": "bob",
+      "to": "server",
+      "y": 200,
+      "label": "delete(pos 3) @rev7",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m3",
+      "from": "server",
+      "to": "log",
+      "y": 230,
+      "label": "append Alice op as rev 8",
+      "variant": "default"
+    },
+    {
+      "id": "m4",
+      "from": "server",
+      "to": "log",
+      "y": 260,
+      "label": "transform Bob op vs rev 8 → delete(pos 4); append rev 9",
+      "variant": "security"
+    },
+    {
+      "id": "m5",
+      "from": "server",
+      "to": "alice",
+      "y": 290,
+      "label": "ack rev 8; apply rev 9",
+      "variant": "return"
+    },
+    {
+      "id": "m6",
+      "from": "server",
+      "to": "bob",
+      "y": 320,
+      "label": "apply rev 8; ack rev 9",
+      "variant": "return"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Ordering",
+      "items": [
+        "Server assigns one total order of revisions",
+        "Clients send ops tagged with base revision"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Transform",
+      "items": [
+        "Concurrent ops are rewritten against earlier ones",
+        "All replicas converge to the same text"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Transport",
+      "items": [
+        "WebSocket per editor",
+        "Snapshots + op log for history"
+      ]
+    }
+  ],
+  "segments": [
+    {
+      "from": 158,
+      "to": 212,
+      "label": "Concurrent edits at rev 7"
+    },
+    {
+      "from": 218,
+      "to": 272,
+      "label": "Server orders and transforms"
+    },
+    {
+      "from": 278,
+      "to": 332,
+      "label": "Broadcast"
+    }
+  ]
+}

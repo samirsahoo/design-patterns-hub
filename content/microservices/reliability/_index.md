@@ -4,7 +4,6 @@ description: "Timeouts, retries, circuit breakers, bulkheads, rate limiting, ide
 weight: 30
 planned:
   - "Rate limiting"
-  - "Idempotency"
   - "Load shedding"
   - "Graceful degradation"
   - "Health checks: liveness versus readiness"

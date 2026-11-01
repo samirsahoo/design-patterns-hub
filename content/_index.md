@@ -13,6 +13,8 @@ featured:
   - /data-systems/transactions-and-isolation
   - /system-design/building-blocks/caching-strategies
   - /system-design/case-studies/payment-system
+  - /system-design/case-studies/chat-system
+  - /microservices/data-consistency/saga-pattern
   - /hexagonal-architecture/layered-vs-hexagonal
   - /self-review/quick-check
 ---
@@ -32,7 +34,8 @@ This handbook explains *why* designs work, not only *what* they are called. Ever
 - **[Microservices](/microservices):** service discovery, API gateway, centralized configuration, Resilience4j, observability with Micrometer and OpenTelemetry, and event-driven services with Spring Cloud Stream, Kafka and RabbitMQ.
 - **[Design patterns](/design-patterns):** all 23 GoF patterns with runnable Java 21 examples, the OO design principles behind them, compound patterns (MVC) and side-by-side comparisons.
 - **[Data-intensive systems](/data-systems):** storage engines, encoding, replication, partitioning, transactions and isolation, distributed-systems faults, consistency and consensus, batch and stream processing.
-- **[System design](/system-design):** an 18-step framework, building blocks (load balancing, caching, consistent hashing, CAP, databases, IDs, queues, real-time push, deployment, security) and case studies (order management, URL shortener, rate limiter, payment system, proximity service).
+- **[System design](/system-design):** an 18-step framework, building blocks (load balancing, caching, consistent hashing, CAP, databases, IDs, queues, real-time push, deployment, security) and 18 case studies with interactive Archify diagrams (order management, URL shortener, rate limiter, payment system, proximity service, chat, news feed, notifications, video streaming, web crawler, autocomplete, key-value store, collaborative editing, stock exchange, ride sharing, metrics and alerting, flash sale, file sync).
+- **[Microservices data patterns](/microservices/data-consistency):** sagas, transactional outbox and inbox, CQRS and event sourcing, and [idempotency](/microservices/reliability/idempotency).
 - **[Software architecture](/software-architecture), [hexagonal architecture](/hexagonal-architecture) and [DDD](/domain-driven-design).**
 - **[Self Review & Quick Check](/self-review):** questions for every area, a service review checklist and a quick reference.
 

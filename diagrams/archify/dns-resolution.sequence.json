@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "What Happens When You Type a URL — DNS to First Byte",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1080,
+      620
+    ],
+    "column_fit": "spread"
+  },
+  "participants": [
+    {
+      "id": "browser",
+      "type": "frontend",
+      "label": "Browser",
+      "sublabel": "cache, OS cache"
+    },
+    {
+      "id": "resolver",
+      "type": "cloud",
+      "label": "Recursive resolver",
+      "sublabel": "ISP or 1.1.1.1"
+    },
+    {
+      "id": "root",
+      "type": "external",
+      "label": "Root server",
+      "sublabel": "."
+    },
+    {
+      "id": "tld",
+      "type": "external",
+      "label": "TLD server",
+      "sublabel": ".com"
+    },
+    {
+      "id": "auth",
+      "type": "external",
+      "label": "Authoritative",
+      "sublabel": "example.com"
+    },
+    {
+      "id": "server",
+      "type": "backend",
+      "label": "Web server",
+      "sublabel": "CDN / LB"
+    }
+  ],
+  "messages": [
+    {
+      "id": "m1",
+      "from": "browser",
+      "to": "resolver",
+      "y": 170,
+      "label": "A? www.example.com",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m2",
+      "from": "resolver",
+      "to": "root",
+      "y": 200,
+      "label": "where is .com?",
+      "variant": "default"
+    },
+    {
+      "id": "m3",
+      "from": "root",
+      "to": "resolver",
+      "y": 230,
+      "label": "ask TLD servers",
+      "variant": "return"
+    },
+    {
+      "id": "m4",
+      "from": "resolver",
+      "to": "tld",
+      "y": 260,
+      "label": "where is example.com?",
+      "variant": "default"
+    },
+    {
+      "id": "m5",
+      "from": "tld",
+      "to": "resolver",
+      "y": 290,
+      "label": "ask ns1.example.com",
+      "variant": "return"
+    },
+    {
+      "id": "m6",
+      "from": "resolver",
+      "to": "auth",
+      "y": 320,
+      "label": "A? www.example.com",
+      "variant": "default"
+    },
+    {
+      "id": "m7",
+      "from": "auth",
+      "to": "resolver",
+      "y": 350,
+      "label": "93.184.215.14 (TTL 300)",
+      "variant": "return"
+    },
+    {
+      "id": "m8",
+      "from": "resolver",
+      "to": "browser",
+      "y": 380,
+      "label": "IP (cached for TTL)",
+      "variant": "return"
+    },
+    {
+      "id": "m9",
+      "from": "browser",
+      "to": "server",
+      "y": 410,
+      "label": "TCP handshake",
+      "variant": "default"
+    },
+    {
+      "id": "m10",
+      "from": "browser",
+      "to": "server",
+      "y": 440,
+      "label": "TLS handshake (SNI, cert)",
+      "variant": "security"
+    },
+    {
+      "id": "m11",
+      "from": "browser",
+      "to": "server",
+      "y": 470,
+      "label": "GET / HTTP/2",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m12",
+      "from": "server",
+      "to": "browser",
+      "y": 500,
+      "label": "200 HTML → parse, fetch assets, render",
+      "variant": "return"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Caching",
+      "items": [
+        "Browser, OS and resolver cache by TTL",
+        "Most lookups never reach the root"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Hierarchy",
+      "items": [
+        "Root → TLD → authoritative",
+        "Resolver iterates; client asks once"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Connection",
+      "items": [
+        "TCP + TLS 1.3 add round trips",
+        "HTTP/3 (QUIC) merges them"
+      ]
+    }
+  ],
+  "segments": [
+    {
+      "from": 158,
+      "to": 392,
+      "label": "DNS lookup"
+    },
+    {
+      "from": 398,
+      "to": 512,
+      "label": "Connect"
+    }
+  ]
+}

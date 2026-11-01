@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Search Autocomplete — Data Pipeline and Serving",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1080,
+      640
+    ]
+  },
+  "stages": [
+    {
+      "label": "Collect"
+    },
+    {
+      "label": "Aggregate"
+    },
+    {
+      "label": "Build"
+    },
+    {
+      "label": "Serve"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "search",
+      "type": "frontend",
+      "label": "Search box",
+      "sublabel": "queries",
+      "stage": 0,
+      "row": 0
+    },
+    {
+      "id": "logs",
+      "type": "messagebus",
+      "label": "Query log",
+      "sublabel": "Kafka",
+      "stage": 0,
+      "row": 2
+    },
+    {
+      "id": "agg",
+      "type": "backend",
+      "label": "Aggregator",
+      "sublabel": "counts per week",
+      "stage": 1,
+      "row": 2
+    },
+    {
+      "id": "freq",
+      "type": "database",
+      "label": "Frequency table",
+      "sublabel": "query, count",
+      "stage": 1,
+      "row": 0
+    },
+    {
+      "id": "build",
+      "type": "backend",
+      "label": "Trie builder",
+      "sublabel": "top-k per prefix",
+      "stage": 2,
+      "row": 0
+    },
+    {
+      "id": "trie",
+      "type": "database",
+      "label": "Trie store",
+      "sublabel": "snapshots",
+      "stage": 2,
+      "row": 2
+    },
+    {
+      "id": "cache",
+      "type": "database",
+      "label": "Trie cache",
+      "sublabel": "in memory, sharded",
+      "stage": 3,
+      "row": 2
+    },
+    {
+      "id": "api",
+      "type": "backend",
+      "label": "Suggest API",
+      "sublabel": "p99 under 100 ms",
+      "stage": 3,
+      "row": 0
+    }
+  ],
+  "flows": [
+    {
+      "from": "search",
+      "to": "logs",
+      "label": "log query",
+      "labelDy": 24,
+      "variant": "dashed"
+    },
+    {
+      "from": "logs",
+      "to": "agg",
+      "label": "stream",
+      "variant": "dashed"
+    },
+    {
+      "from": "agg",
+      "to": "freq",
+      "label": "counts",
+      "labelDy": -20,
+      "variant": "emphasis"
+    },
+    {
+      "from": "freq",
+      "to": "build",
+      "label": "rebuild",
+      "variant": "emphasis"
+    },
+    {
+      "from": "build",
+      "to": "trie",
+      "label": "snapshot",
+      "labelDy": 24,
+      "variant": "emphasis"
+    },
+    {
+      "from": "trie",
+      "to": "cache",
+      "label": "load",
+      "variant": "emphasis"
+    },
+    {
+      "from": "cache",
+      "to": "api",
+      "label": "top 5",
+      "labelDy": -20,
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Collect",
+      "items": [
+        "Sample or log every query",
+        "Filter offensive terms"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Build",
+      "items": [
+        "Weekly or hourly rebuild",
+        "Precompute top-k at each node"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Serve",
+      "items": [
+        "Shard by prefix",
+        "Browser caches responses"
+      ]
+    }
+  ]
+}

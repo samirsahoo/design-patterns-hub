@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "File Sync — Chunked Upload and Notification",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1080,
+      560
+    ],
+    "column_fit": "spread"
+  },
+  "participants": [
+    {
+      "id": "client",
+      "type": "frontend",
+      "label": "Desktop client",
+      "sublabel": "watcher"
+    },
+    {
+      "id": "api",
+      "type": "backend",
+      "label": "Metadata API",
+      "sublabel": "files, versions"
+    },
+    {
+      "id": "blob",
+      "type": "cloud",
+      "label": "Block store",
+      "sublabel": "S3, content-addressed"
+    },
+    {
+      "id": "mdb",
+      "type": "database",
+      "label": "Metadata DB",
+      "sublabel": "versions, chunks"
+    },
+    {
+      "id": "notify",
+      "type": "messagebus",
+      "label": "Notification",
+      "sublabel": "long poll / push"
+    },
+    {
+      "id": "other",
+      "type": "frontend",
+      "label": "Other device",
+      "sublabel": "same account"
+    }
+  ],
+  "messages": [
+    {
+      "id": "m1",
+      "from": "client",
+      "to": "api",
+      "y": 170,
+      "label": "commit intent: SHA-256 of each 4 MB chunk",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m2",
+      "from": "api",
+      "to": "client",
+      "y": 200,
+      "label": "missing chunks: 2 of 5",
+      "variant": "return"
+    },
+    {
+      "id": "m3",
+      "from": "client",
+      "to": "blob",
+      "y": 230,
+      "label": "PUT missing chunks (presigned)",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m4",
+      "from": "client",
+      "to": "api",
+      "y": 260,
+      "label": "commit version",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m5",
+      "from": "api",
+      "to": "mdb",
+      "y": 290,
+      "label": "new version → chunk list",
+      "variant": "default"
+    },
+    {
+      "id": "m6",
+      "from": "api",
+      "to": "notify",
+      "y": 320,
+      "label": "file changed",
+      "variant": "dashed"
+    },
+    {
+      "id": "m7",
+      "from": "notify",
+      "to": "other",
+      "y": 350,
+      "label": "changes since cursor",
+      "variant": "dashed"
+    },
+    {
+      "id": "m8",
+      "from": "other",
+      "to": "api",
+      "y": 380,
+      "label": "get version chunk list",
+      "variant": "default"
+    },
+    {
+      "id": "m9",
+      "from": "other",
+      "to": "blob",
+      "y": 410,
+      "label": "GET changed chunks only",
+      "variant": "default"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Dedup",
+      "items": [
+        "Chunks addressed by hash",
+        "Only new chunks are uploaded"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Metadata",
+      "items": [
+        "Versions are lists of chunk hashes",
+        "Strongly consistent metadata store"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Sync",
+      "items": [
+        "Clients pull deltas since a cursor",
+        "Conflicts become conflicted copies"
+      ]
+    }
+  ],
+  "segments": [
+    {
+      "from": 158,
+      "to": 302,
+      "label": "Upload"
+    },
+    {
+      "from": 308,
+      "to": 422,
+      "label": "Sync"
+    }
+  ]
+}

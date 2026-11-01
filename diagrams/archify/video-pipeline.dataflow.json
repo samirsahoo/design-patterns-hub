@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Video Platform — Upload, Transcode and Stream",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1080,
+      640
+    ]
+  },
+  "stages": [
+    {
+      "label": "Upload"
+    },
+    {
+      "label": "Process"
+    },
+    {
+      "label": "Store"
+    },
+    {
+      "label": "Deliver"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "creator",
+      "type": "frontend",
+      "label": "Creator",
+      "sublabel": "resumable upload",
+      "stage": 0,
+      "row": 0
+    },
+    {
+      "id": "raw",
+      "type": "cloud",
+      "label": "Raw store",
+      "sublabel": "original file",
+      "stage": 0,
+      "row": 2
+    },
+    {
+      "id": "split",
+      "type": "backend",
+      "label": "Splitter",
+      "sublabel": "GOP-aligned chunks",
+      "stage": 1,
+      "row": 0
+    },
+    {
+      "id": "encode",
+      "type": "backend",
+      "label": "Encoders",
+      "sublabel": "codecs x bitrates",
+      "stage": 1,
+      "row": 2
+    },
+    {
+      "id": "seg",
+      "type": "cloud",
+      "label": "Segment store",
+      "sublabel": "HLS / DASH",
+      "stage": 2,
+      "row": 0
+    },
+    {
+      "id": "meta",
+      "type": "database",
+      "label": "Video metadata",
+      "sublabel": "manifests, status",
+      "stage": 2,
+      "row": 2
+    },
+    {
+      "id": "cdn",
+      "type": "cloud",
+      "label": "CDN / edge",
+      "sublabel": "cached segments",
+      "stage": 3,
+      "row": 0
+    },
+    {
+      "id": "player",
+      "type": "frontend",
+      "label": "Player",
+      "sublabel": "adaptive bitrate",
+      "stage": 3,
+      "row": 2
+    }
+  ],
+  "flows": [
+    {
+      "from": "creator",
+      "to": "raw",
+      "label": "upload",
+      "labelDy": 24,
+      "variant": "emphasis"
+    },
+    {
+      "from": "raw",
+      "to": "split",
+      "label": "new video",
+      "variant": "dashed"
+    },
+    {
+      "from": "split",
+      "to": "encode",
+      "label": "chunks",
+      "labelDy": 24,
+      "variant": "emphasis"
+    },
+    {
+      "from": "encode",
+      "to": "seg",
+      "label": "renditions",
+      "variant": "emphasis"
+    },
+    {
+      "from": "encode",
+      "to": "meta",
+      "label": "status",
+      "variant": "dashed",
+      "route": "straight",
+      "labelDx": 26
+    },
+    {
+      "from": "seg",
+      "to": "cdn",
+      "label": "origin pull",
+      "variant": "emphasis"
+    },
+    {
+      "from": "meta",
+      "to": "player",
+      "label": "manifest",
+      "variant": "dashed"
+    },
+    {
+      "from": "cdn",
+      "to": "player",
+      "label": "segments",
+      "labelDy": 24,
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Ingest",
+      "items": [
+        "Resumable, chunked uploads to object storage",
+        "Event triggers the processing DAG"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Transcode",
+      "items": [
+        "Chunks encoded in parallel",
+        "Ladder of resolutions and bitrates"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Stream",
+      "items": [
+        "Player picks bitrate per segment",
+        "CDN serves the long tail of views"
+      ]
+    }
+  ]
+}

@@ -149,6 +149,33 @@ Pattern articles include runnable examples under `examples/java/src/hub/patterns
 
 New sections: `/data-systems` (Data-Intensive Systems) and `/system-design/building-blocks`.
 
+## Published (batch 4, 2026-11-01): system design case studies, distributed data patterns and Archify diagrams
+
+Researched with web sources (Discord, Uber H3, Netflix Open Connect, LMAX, Kafka 4.0, OT vs CRDT, crawler design) and the batch 3 books; every source is cited in the article. 20 new interactive Archify diagrams (sources in `diagrams/archify/`, HTML in `static/diagrams/`), all passing `--quality showcase` validation and `visual-check`; `payment-system` and `url-shortener` diagrams were added to the batch 3 articles.
+
+| # | Article | Path | Archify diagram |
+|---|---|---|---|
+| 109 | Designing a Chat System | `/system-design/case-studies/chat-system` | `chat-system` |
+| 110 | Designing a News Feed | `/system-design/case-studies/news-feed` | `news-feed` |
+| 111 | Designing a Notification Service | `/system-design/case-studies/notification-service` | `notification-service` |
+| 112 | Designing a Video Streaming Platform | `/system-design/case-studies/video-streaming` | `video-pipeline` |
+| 113 | Designing a Web Crawler | `/system-design/case-studies/web-crawler` | `web-crawler` |
+| 114 | Designing Search Autocomplete | `/system-design/case-studies/search-autocomplete` | `autocomplete` |
+| 115 | Designing a Distributed Key-Value Store | `/system-design/case-studies/distributed-key-value-store` | `distributed-kv-store` |
+| 116 | Designing Collaborative Editing | `/system-design/case-studies/collaborative-editing` | `collaborative-editing` |
+| 117 | Designing a Stock Exchange | `/system-design/case-studies/stock-exchange` | `stock-exchange` |
+| 118 | Designing a Ride-Sharing Service | `/system-design/case-studies/ride-sharing` | `ride-sharing` |
+| 119 | Designing a Metrics Monitoring and Alerting System | `/system-design/case-studies/metrics-monitoring` | `metrics-monitoring` |
+| 120 | Designing a Flash Sale System | `/system-design/case-studies/flash-sale` | `flash-sale` |
+| 121 | Designing File Storage and Sync | `/system-design/case-studies/file-storage-sync` | `file-sync` |
+| 122 | Saga Pattern: Choreography versus Orchestration | `/microservices/data-consistency/saga-pattern` | `saga-orchestration` |
+| 123 | Transactional Outbox and Idempotent Inbox | `/microservices/data-consistency/transactional-outbox` | `transactional-outbox` |
+| 124 | CQRS and Event Sourcing | `/microservices/data-consistency/cqrs-and-event-sourcing` | `cqrs-event-sourcing` |
+| 125 | Idempotency: Safe Retries | `/microservices/reliability/idempotency` | `idempotency-key` |
+| 126 | DNS and What Happens When You Type a URL | `/system-design/building-blocks/dns-and-web-request-lifecycle` | `dns-resolution` |
+| 127 | Probabilistic Data Structures | `/system-design/building-blocks/probabilistic-data-structures` | — |
+| 128 | REST vs GraphQL vs gRPC vs Messaging | `/comparisons/rest-graphql-grpc` | — |
+
 ## Suggested next batches
 
 Batches are chosen so that each one completes a learning-path stretch.
@@ -159,8 +186,8 @@ Batches are chosen so that each one completes a learning-path stretch.
   proxies, transactions and propagation, N+1, Spring Security basics.
 - **Batch 6 — Microservices reliability and data:** timeouts and retries, circuit
   breaker, idempotency, saga, transactional outbox, CQRS.
-- **Next system design case studies:** notification service, file upload service,
-  inventory management, flash sale system.
+- **Next system design case studies:** inventory management, hotel reservation,
+  ad click aggregation, distributed message queue, S3-like object store.
 
 ## Planned (by section)
 

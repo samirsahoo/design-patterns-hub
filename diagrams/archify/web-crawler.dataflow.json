@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Web Crawler — Frontier to Index",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1080,
+      640
+    ]
+  },
+  "stages": [
+    {
+      "label": "Schedule"
+    },
+    {
+      "label": "Fetch"
+    },
+    {
+      "label": "Process"
+    },
+    {
+      "label": "Store"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "seeds",
+      "type": "external",
+      "label": "Seed URLs",
+      "sublabel": "sitemaps, links",
+      "stage": 0,
+      "row": 0
+    },
+    {
+      "id": "frontier",
+      "type": "messagebus",
+      "label": "URL frontier",
+      "sublabel": "per-host queues",
+      "stage": 0,
+      "row": 2
+    },
+    {
+      "id": "robots",
+      "type": "security",
+      "label": "Politeness",
+      "sublabel": "robots.txt, delays",
+      "stage": 1,
+      "row": 0
+    },
+    {
+      "id": "fetch",
+      "type": "backend",
+      "label": "Fetchers",
+      "sublabel": "DNS cache, HTTP",
+      "stage": 1,
+      "row": 2
+    },
+    {
+      "id": "parse",
+      "type": "backend",
+      "label": "Parser",
+      "sublabel": "links + text",
+      "stage": 2,
+      "row": 0
+    },
+    {
+      "id": "dedup",
+      "type": "backend",
+      "label": "Dedup",
+      "sublabel": "Bloom, SimHash",
+      "stage": 2,
+      "row": 2
+    },
+    {
+      "id": "content",
+      "type": "cloud",
+      "label": "Content store",
+      "sublabel": "compressed pages",
+      "stage": 3,
+      "row": 0
+    },
+    {
+      "id": "index",
+      "type": "database",
+      "label": "Indexer",
+      "sublabel": "inverted index",
+      "stage": 3,
+      "row": 2
+    }
+  ],
+  "flows": [
+    {
+      "from": "seeds",
+      "to": "frontier",
+      "label": "enqueue",
+      "labelDy": 24,
+      "variant": "emphasis"
+    },
+    {
+      "from": "frontier",
+      "to": "fetch",
+      "label": "next URL",
+      "variant": "emphasis"
+    },
+    {
+      "from": "robots",
+      "to": "fetch",
+      "label": "allowed?",
+      "labelDy": 24,
+      "variant": "dashed"
+    },
+    {
+      "from": "fetch",
+      "to": "parse",
+      "label": "HTML",
+      "variant": "emphasis"
+    },
+    {
+      "from": "parse",
+      "to": "dedup",
+      "label": "new links",
+      "labelDy": 24,
+      "variant": "dashed"
+    },
+    {
+      "from": "parse",
+      "to": "content",
+      "label": "page",
+      "variant": "emphasis"
+    },
+    {
+      "from": "content",
+      "to": "index",
+      "label": "tokens",
+      "labelDy": 24,
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Frontier",
+      "items": [
+        "Front queues by priority",
+        "Back queues: one host per queue"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Politeness",
+      "items": [
+        "Obey robots.txt and crawl delays",
+        "Never hammer one host"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Dedup",
+      "items": [
+        "URL seen-set via Bloom filter",
+        "Near-duplicate pages via SimHash"
+      ]
+    }
+  ]
+}

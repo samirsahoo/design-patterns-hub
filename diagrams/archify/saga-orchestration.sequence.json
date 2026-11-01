@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Order Saga — Orchestration with Compensation",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1080,
+      620
+    ],
+    "column_fit": "spread"
+  },
+  "participants": [
+    {
+      "id": "client",
+      "type": "frontend",
+      "label": "Client",
+      "sublabel": "checkout"
+    },
+    {
+      "id": "orch",
+      "type": "backend",
+      "label": "Order service",
+      "sublabel": "saga orchestrator"
+    },
+    {
+      "id": "bus",
+      "type": "messagebus",
+      "label": "Broker",
+      "sublabel": "commands + replies"
+    },
+    {
+      "id": "inv",
+      "type": "backend",
+      "label": "Inventory",
+      "sublabel": "reservations"
+    },
+    {
+      "id": "pay",
+      "type": "backend",
+      "label": "Payments",
+      "sublabel": "charges"
+    },
+    {
+      "id": "ship",
+      "type": "backend",
+      "label": "Shipping",
+      "sublabel": "shipments"
+    }
+  ],
+  "messages": [
+    {
+      "id": "m1",
+      "from": "client",
+      "to": "orch",
+      "y": 170,
+      "label": "POST /orders",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m2",
+      "from": "orch",
+      "to": "client",
+      "y": 200,
+      "label": "202 PENDING",
+      "variant": "return"
+    },
+    {
+      "id": "m3",
+      "from": "orch",
+      "to": "bus",
+      "y": 230,
+      "label": "ReserveStock",
+      "variant": "dashed"
+    },
+    {
+      "id": "m4",
+      "from": "bus",
+      "to": "inv",
+      "y": 260,
+      "label": "ReserveStock",
+      "variant": "dashed"
+    },
+    {
+      "id": "m5",
+      "from": "inv",
+      "to": "orch",
+      "y": 290,
+      "label": "StockReserved",
+      "variant": "return"
+    },
+    {
+      "id": "m6",
+      "from": "orch",
+      "to": "bus",
+      "y": 320,
+      "label": "ChargePayment",
+      "variant": "dashed"
+    },
+    {
+      "id": "m7",
+      "from": "bus",
+      "to": "pay",
+      "y": 350,
+      "label": "ChargePayment",
+      "variant": "dashed"
+    },
+    {
+      "id": "m8",
+      "from": "pay",
+      "to": "orch",
+      "y": 380,
+      "label": "PaymentFailed",
+      "variant": "return"
+    },
+    {
+      "id": "m9",
+      "from": "orch",
+      "to": "bus",
+      "y": 410,
+      "label": "ReleaseStock",
+      "variant": "security"
+    },
+    {
+      "id": "m10",
+      "from": "bus",
+      "to": "inv",
+      "y": 440,
+      "label": "ReleaseStock",
+      "variant": "security"
+    },
+    {
+      "id": "m11",
+      "from": "inv",
+      "to": "orch",
+      "y": 470,
+      "label": "StockReleased",
+      "variant": "return"
+    },
+    {
+      "id": "m12",
+      "from": "orch",
+      "to": "client",
+      "y": 500,
+      "label": "order REJECTED (notify)",
+      "variant": "return"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Orchestration",
+      "items": [
+        "One component owns the saga state machine",
+        "Each step is a local transaction in one service"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Compensation",
+      "items": [
+        "A failed step triggers semantic undo of completed steps",
+        "Compensations must be idempotent and retryable"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Delivery",
+      "items": [
+        "Commands and replies go through the outbox",
+        "Consumers deduplicate by message ID"
+      ]
+    }
+  ],
+  "segments": [
+    {
+      "from": 158,
+      "to": 212,
+      "label": "Start"
+    },
+    {
+      "from": 218,
+      "to": 392,
+      "label": "Happy steps"
+    },
+    {
+      "from": 398,
+      "to": 512,
+      "label": "Compensate"
+    }
+  ]
+}

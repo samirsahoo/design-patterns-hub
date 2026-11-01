@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Notification Service — Multi-Channel Delivery",
+    "locale": "en",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "producers",
+      "type": "backend",
+      "label": "Producer services",
+      "sublabel": "orders, payments",
+      "pos": [
+        40,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "api",
+      "type": "backend",
+      "label": "Notification API",
+      "sublabel": "validate, dedupe",
+      "pos": [
+        280,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "prefs",
+      "type": "database",
+      "label": "Preferences",
+      "sublabel": "opt-outs, devices",
+      "pos": [
+        280,
+        80
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "tmpl",
+      "type": "database",
+      "label": "Templates",
+      "sublabel": "per locale",
+      "pos": [
+        520,
+        80
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "queue",
+      "type": "messagebus",
+      "label": "Channel queues",
+      "sublabel": "push / SMS / email",
+      "pos": [
+        520,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "workers",
+      "type": "backend",
+      "label": "Channel workers",
+      "sublabel": "render, retry",
+      "pos": [
+        760,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "log",
+      "type": "database",
+      "label": "Delivery log",
+      "sublabel": "status, analytics",
+      "pos": [
+        760,
+        440
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "vendors",
+      "type": "external",
+      "label": "Providers",
+      "sublabel": "APNs, FCM, Twilio, SES",
+      "pos": [
+        1000,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "dlq",
+      "type": "messagebus",
+      "label": "Dead letters",
+      "sublabel": "after retries",
+      "pos": [
+        520,
+        440
+      ],
+      "size": [
+        150,
+        64
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "n1",
+      "from": "producers",
+      "to": "api",
+      "label": "send event",
+      "variant": "emphasis"
+    },
+    {
+      "id": "n2",
+      "from": "api",
+      "to": "prefs",
+      "label": "check",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "n3",
+      "from": "api",
+      "to": "queue",
+      "label": "enqueue",
+      "variant": "emphasis"
+    },
+    {
+      "id": "n4",
+      "from": "queue",
+      "to": "workers",
+      "label": "consume"
+    },
+    {
+      "id": "n5",
+      "from": "workers",
+      "to": "tmpl",
+      "label": "render",
+      "fromSide": "top",
+      "toSide": "right"
+    },
+    {
+      "id": "n6",
+      "from": "workers",
+      "to": "vendors",
+      "label": "deliver",
+      "variant": "emphasis"
+    },
+    {
+      "id": "n7",
+      "from": "workers",
+      "to": "log",
+      "label": "record",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 24,
+      "labelDx": 34
+    },
+    {
+      "id": "n8",
+      "from": "workers",
+      "to": "dlq",
+      "label": "give up",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "right"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Intake",
+      "items": [
+        "Idempotency key per notification",
+        "User preferences and quiet hours checked first"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Delivery",
+      "items": [
+        "One queue per channel isolates slow providers",
+        "Retries with backoff, then dead letters"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Tracking",
+      "items": [
+        "Sent, delivered, opened events",
+        "Rate limits per user and per provider"
+      ]
+    }
+  ]
+}

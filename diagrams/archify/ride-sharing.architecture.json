@@ -1,0 +1,222 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Ride Sharing — Matching and Location Tracking",
+    "locale": "en",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "rider",
+      "type": "frontend",
+      "label": "Rider app",
+      "sublabel": "request ride",
+      "pos": [
+        40,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "driver",
+      "type": "frontend",
+      "label": "Driver app",
+      "sublabel": "GPS every 4 s",
+      "pos": [
+        40,
+        440
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "gw",
+      "type": "security",
+      "label": "Gateway",
+      "sublabel": "auth, WebSocket",
+      "pos": [
+        280,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "loc",
+      "type": "backend",
+      "label": "Location service",
+      "sublabel": "ingest updates",
+      "pos": [
+        280,
+        440
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "geo",
+      "type": "database",
+      "label": "Geo index",
+      "sublabel": "H3 cell → drivers",
+      "pos": [
+        520,
+        440
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "match",
+      "type": "backend",
+      "label": "Dispatch",
+      "sublabel": "find + offer",
+      "pos": [
+        520,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "trip",
+      "type": "backend",
+      "label": "Trip service",
+      "sublabel": "state machine",
+      "pos": [
+        760,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "tripdb",
+      "type": "database",
+      "label": "Trip store",
+      "sublabel": "trips, ledger",
+      "pos": [
+        1000,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "pricing",
+      "type": "backend",
+      "label": "Pricing",
+      "sublabel": "ETA, surge",
+      "pos": [
+        520,
+        80
+      ],
+      "size": [
+        150,
+        64
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "r1",
+      "from": "rider",
+      "to": "gw",
+      "label": "request",
+      "variant": "emphasis"
+    },
+    {
+      "id": "r2",
+      "from": "gw",
+      "to": "match",
+      "label": "match",
+      "variant": "emphasis"
+    },
+    {
+      "id": "r3",
+      "from": "driver",
+      "to": "loc",
+      "label": "location",
+      "variant": "dashed"
+    },
+    {
+      "id": "r4",
+      "from": "loc",
+      "to": "geo",
+      "label": "update cell"
+    },
+    {
+      "id": "r5",
+      "from": "match",
+      "to": "geo",
+      "label": "nearby",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 24
+    },
+    {
+      "id": "r6",
+      "from": "match",
+      "to": "pricing",
+      "label": "quote",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "r7",
+      "from": "match",
+      "to": "trip",
+      "label": "assign",
+      "variant": "emphasis"
+    },
+    {
+      "id": "r8",
+      "from": "trip",
+      "to": "tripdb",
+      "label": "persist"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Location",
+      "items": [
+        "Millions of updates per second",
+        "In-memory geo index keyed by H3 cells"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Dispatch",
+      "items": [
+        "k-ring search around the rider's cell",
+        "Offer to one driver, time out, try next"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Trips",
+      "items": [
+        "Trip lifecycle as a state machine",
+        "Pricing uses supply and demand per cell"
+      ]
+    }
+  ]
+}

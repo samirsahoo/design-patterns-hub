@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Transactional Outbox and Idempotent Inbox",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1080,
+      560
+    ],
+    "column_fit": "spread"
+  },
+  "participants": [
+    {
+      "id": "api",
+      "type": "frontend",
+      "label": "Client",
+      "sublabel": "request"
+    },
+    {
+      "id": "svc",
+      "type": "backend",
+      "label": "Order service",
+      "sublabel": "business logic"
+    },
+    {
+      "id": "db",
+      "type": "database",
+      "label": "Orders DB",
+      "sublabel": "orders + outbox"
+    },
+    {
+      "id": "relay",
+      "type": "backend",
+      "label": "Relay",
+      "sublabel": "poller or CDC"
+    },
+    {
+      "id": "broker",
+      "type": "messagebus",
+      "label": "Kafka",
+      "sublabel": "topic orders"
+    },
+    {
+      "id": "cons",
+      "type": "backend",
+      "label": "Consumer",
+      "sublabel": "billing service"
+    },
+    {
+      "id": "cdb",
+      "type": "database",
+      "label": "Billing DB",
+      "sublabel": "data + inbox"
+    }
+  ],
+  "messages": [
+    {
+      "id": "m1",
+      "from": "api",
+      "to": "svc",
+      "y": 170,
+      "label": "place order",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m2",
+      "from": "svc",
+      "to": "db",
+      "y": 200,
+      "label": "BEGIN; insert order; insert outbox row; COMMIT",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m3",
+      "from": "svc",
+      "to": "api",
+      "y": 230,
+      "label": "201 Created",
+      "variant": "return"
+    },
+    {
+      "id": "m4",
+      "from": "relay",
+      "to": "db",
+      "y": 260,
+      "label": "read unsent outbox rows",
+      "variant": "default"
+    },
+    {
+      "id": "m5",
+      "from": "relay",
+      "to": "broker",
+      "y": 290,
+      "label": "publish OrderPlaced (key = orderId)",
+      "variant": "dashed"
+    },
+    {
+      "id": "m6",
+      "from": "relay",
+      "to": "db",
+      "y": 320,
+      "label": "mark sent",
+      "variant": "default"
+    },
+    {
+      "id": "m7",
+      "from": "broker",
+      "to": "cons",
+      "y": 350,
+      "label": "OrderPlaced (maybe duplicate)",
+      "variant": "dashed"
+    },
+    {
+      "id": "m8",
+      "from": "cons",
+      "to": "cdb",
+      "y": 380,
+      "label": "BEGIN; insert inbox(msgId) or skip; apply; COMMIT",
+      "variant": "security"
+    },
+    {
+      "id": "m9",
+      "from": "cons",
+      "to": "broker",
+      "y": 410,
+      "label": "commit offset",
+      "variant": "return"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Atomic write",
+      "items": [
+        "State change and event are one local transaction",
+        "No dual write to DB and broker"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "At-least-once",
+      "items": [
+        "The relay may publish twice after a crash",
+        "Order kept per key / partition"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Inbox",
+      "items": [
+        "Unique message ID makes the consumer idempotent",
+        "Effect and dedup record commit together"
+      ]
+    }
+  ],
+  "segments": [
+    {
+      "from": 158,
+      "to": 242,
+      "label": "Write once"
+    },
+    {
+      "from": 248,
+      "to": 332,
+      "label": "Relay"
+    },
+    {
+      "from": 338,
+      "to": 422,
+      "label": "Consume"
+    }
+  ]
+}

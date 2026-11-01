@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Stock Exchange — Low-Latency Critical Path",
+    "locale": "en",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "broker",
+      "type": "external",
+      "label": "Brokers",
+      "sublabel": "FIX gateway",
+      "pos": [
+        40,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "gw",
+      "type": "security",
+      "label": "Order gateway",
+      "sublabel": "auth, validation",
+      "pos": [
+        280,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "risk",
+      "type": "backend",
+      "label": "Risk check",
+      "sublabel": "limits, funds",
+      "pos": [
+        520,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "seq",
+      "type": "messagebus",
+      "label": "Sequencer",
+      "sublabel": "total order, journal",
+      "pos": [
+        760,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "me",
+      "type": "backend",
+      "label": "Matching engine",
+      "sublabel": "order book per symbol",
+      "pos": [
+        1000,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "journal",
+      "type": "database",
+      "label": "Event journal",
+      "sublabel": "replayable",
+      "pos": [
+        760,
+        80
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "md",
+      "type": "backend",
+      "label": "Market data",
+      "sublabel": "trades, book depth",
+      "pos": [
+        1000,
+        440
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "report",
+      "type": "backend",
+      "label": "Reporter",
+      "sublabel": "fills, clearing",
+      "pos": [
+        760,
+        440
+      ],
+      "size": [
+        150,
+        64
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "s1",
+      "from": "broker",
+      "to": "gw",
+      "label": "orders",
+      "variant": "emphasis"
+    },
+    {
+      "id": "s2",
+      "from": "gw",
+      "to": "risk",
+      "label": "validate",
+      "variant": "emphasis"
+    },
+    {
+      "id": "s3",
+      "from": "risk",
+      "to": "seq",
+      "label": "accept",
+      "variant": "emphasis"
+    },
+    {
+      "id": "s4",
+      "from": "seq",
+      "to": "me",
+      "label": "sequenced",
+      "variant": "emphasis"
+    },
+    {
+      "id": "s5",
+      "from": "seq",
+      "to": "journal",
+      "label": "append",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "s6",
+      "from": "me",
+      "to": "md",
+      "label": "publish",
+      "variant": "dashed",
+      "labelDx": 36,
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 24
+    },
+    {
+      "id": "s7",
+      "from": "me",
+      "to": "report",
+      "label": "fills",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "right"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Critical path",
+      "items": [
+        "Gateway → risk → sequencer → matching",
+        "In memory, single-threaded per symbol"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Determinism",
+      "items": [
+        "Every input sequenced and journaled",
+        "Replay rebuilds the order book"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Outputs",
+      "items": [
+        "Market data multicast to subscribers",
+        "Executions to brokers and clearing"
+      ]
+    }
+  ]
+}

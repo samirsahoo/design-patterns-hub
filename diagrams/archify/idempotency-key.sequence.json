@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Idempotency Key — Safe Retries",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1080,
+      560
+    ],
+    "column_fit": "spread"
+  },
+  "participants": [
+    {
+      "id": "client",
+      "type": "frontend",
+      "label": "Client",
+      "sublabel": "mobile app"
+    },
+    {
+      "id": "api",
+      "type": "backend",
+      "label": "Payments API",
+      "sublabel": "idempotent POST"
+    },
+    {
+      "id": "store",
+      "type": "database",
+      "label": "Idempotency store",
+      "sublabel": "key → response"
+    },
+    {
+      "id": "psp",
+      "type": "external",
+      "label": "PSP",
+      "sublabel": "card network"
+    }
+  ],
+  "messages": [
+    {
+      "id": "m1",
+      "from": "client",
+      "to": "api",
+      "y": 170,
+      "label": "POST /payments (Idempotency-Key: K)",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m2",
+      "from": "api",
+      "to": "store",
+      "y": 200,
+      "label": "insert K as IN_PROGRESS (unique)",
+      "variant": "security"
+    },
+    {
+      "id": "m3",
+      "from": "api",
+      "to": "psp",
+      "y": 230,
+      "label": "charge (PSP key K)",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m4",
+      "from": "psp",
+      "to": "api",
+      "y": 260,
+      "label": "approved",
+      "variant": "return"
+    },
+    {
+      "id": "m5",
+      "from": "api",
+      "to": "store",
+      "y": 290,
+      "label": "save K → 201 + body",
+      "variant": "default"
+    },
+    {
+      "id": "m6",
+      "from": "api",
+      "to": "client",
+      "y": 320,
+      "label": "response lost (timeout)",
+      "variant": "dashed"
+    },
+    {
+      "id": "m7",
+      "from": "client",
+      "to": "api",
+      "y": 350,
+      "label": "POST /payments (same key K)",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m8",
+      "from": "api",
+      "to": "store",
+      "y": 380,
+      "label": "lookup K",
+      "variant": "security"
+    },
+    {
+      "id": "m9",
+      "from": "store",
+      "to": "api",
+      "y": 410,
+      "label": "COMPLETED: stored 201",
+      "variant": "return"
+    },
+    {
+      "id": "m10",
+      "from": "api",
+      "to": "client",
+      "y": 440,
+      "label": "201 (replayed, no new charge)",
+      "variant": "return"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Contract",
+      "items": [
+        "Client generates one key per logical operation",
+        "Same key + same body → same result"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Concurrency",
+      "items": [
+        "Unique insert stops two in-flight duplicates",
+        "IN_PROGRESS requests get 409 or wait"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Retention",
+      "items": [
+        "Keys expire after e.g. 24 h",
+        "Different body with same key → 422"
+      ]
+    }
+  ],
+  "segments": [
+    {
+      "from": 158,
+      "to": 332,
+      "label": "First attempt"
+    },
+    {
+      "from": 338,
+      "to": 452,
+      "label": "Retry"
+    }
+  ]
+}

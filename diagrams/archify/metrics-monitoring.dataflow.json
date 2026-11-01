@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Metrics Monitoring and Alerting",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1080,
+      640
+    ]
+  },
+  "stages": [
+    {
+      "label": "Sources"
+    },
+    {
+      "label": "Collect"
+    },
+    {
+      "label": "Store + evaluate"
+    },
+    {
+      "label": "Act"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "svc",
+      "type": "backend",
+      "label": "Services",
+      "sublabel": "/metrics, OTLP",
+      "stage": 0,
+      "row": 0
+    },
+    {
+      "id": "hosts",
+      "type": "cloud",
+      "label": "Hosts",
+      "sublabel": "node exporter",
+      "stage": 0,
+      "row": 2
+    },
+    {
+      "id": "collect",
+      "type": "backend",
+      "label": "Collectors",
+      "sublabel": "scrape or push",
+      "stage": 1,
+      "row": 0
+    },
+    {
+      "id": "kafka",
+      "type": "messagebus",
+      "label": "Kafka",
+      "sublabel": "buffer",
+      "stage": 1,
+      "row": 2
+    },
+    {
+      "id": "tsdb",
+      "type": "database",
+      "label": "Time-series DB",
+      "sublabel": "compressed, downsampled",
+      "stage": 2,
+      "row": 0
+    },
+    {
+      "id": "rules",
+      "type": "backend",
+      "label": "Rule evaluator",
+      "sublabel": "PromQL every 30 s",
+      "stage": 2,
+      "row": 2
+    },
+    {
+      "id": "dash",
+      "type": "frontend",
+      "label": "Dashboards",
+      "sublabel": "Grafana",
+      "stage": 3,
+      "row": 0
+    },
+    {
+      "id": "alert",
+      "type": "security",
+      "label": "Alertmanager",
+      "sublabel": "dedupe, route",
+      "stage": 3,
+      "row": 2
+    }
+  ],
+  "flows": [
+    {
+      "from": "svc",
+      "to": "collect",
+      "label": "scrape",
+      "variant": "emphasis"
+    },
+    {
+      "from": "hosts",
+      "to": "kafka",
+      "label": "push",
+      "variant": "dashed"
+    },
+    {
+      "from": "collect",
+      "to": "tsdb",
+      "label": "samples",
+      "variant": "emphasis"
+    },
+    {
+      "from": "kafka",
+      "to": "rules",
+      "label": "stream",
+      "variant": "dashed"
+    },
+    {
+      "from": "tsdb",
+      "to": "dash",
+      "label": "queries",
+      "variant": "emphasis"
+    },
+    {
+      "from": "rules",
+      "to": "alert",
+      "label": "firing",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Data",
+      "items": [
+        "Labels define series; watch cardinality",
+        "Retention tiers with downsampling"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Pipeline",
+      "items": [
+        "Pull for services, push for jobs",
+        "Buffer with Kafka at scale"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Alerts",
+      "items": [
+        "Alert on symptoms and SLO burn",
+        "Group, silence and route to on-call"
+      ]
+    }
+  ]
+}

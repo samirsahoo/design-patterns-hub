@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "URL Shortener — Read-Heavy Architecture",
+    "locale": "en",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "users",
+      "type": "frontend",
+      "label": "Users",
+      "sublabel": "click short link",
+      "pos": [
+        40,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "lb",
+      "type": "cloud",
+      "label": "Load balancer",
+      "sublabel": "edge / CDN",
+      "pos": [
+        280,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "svc",
+      "type": "backend",
+      "label": "Shortener",
+      "sublabel": "stateless",
+      "pos": [
+        520,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "cache",
+      "type": "database",
+      "label": "Redis",
+      "sublabel": "code → URL",
+      "pos": [
+        520,
+        80
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "kv",
+      "type": "database",
+      "label": "KV store",
+      "sublabel": "DynamoDB / Cassandra",
+      "pos": [
+        760,
+        260
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "ids",
+      "type": "backend",
+      "label": "ID ranges",
+      "sublabel": "counter service",
+      "pos": [
+        760,
+        80
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "kafka",
+      "type": "messagebus",
+      "label": "Click events",
+      "sublabel": "Kafka",
+      "pos": [
+        520,
+        440
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "analytics",
+      "type": "backend",
+      "label": "Analytics",
+      "sublabel": "aggregates",
+      "pos": [
+        760,
+        440
+      ],
+      "size": [
+        150,
+        64
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "u1",
+      "from": "users",
+      "to": "lb",
+      "label": "GET /3Fq9Zk",
+      "variant": "emphasis"
+    },
+    {
+      "id": "u2",
+      "from": "lb",
+      "to": "svc",
+      "label": "route",
+      "variant": "emphasis"
+    },
+    {
+      "id": "u3",
+      "from": "svc",
+      "to": "cache",
+      "label": "lookup",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "labelDx": -30
+    },
+    {
+      "id": "u4",
+      "from": "svc",
+      "to": "kv",
+      "label": "on miss"
+    },
+    {
+      "id": "u5",
+      "from": "svc",
+      "to": "ids",
+      "label": "next range",
+      "fromSide": "top",
+      "toSide": "left"
+    },
+    {
+      "id": "u6",
+      "from": "svc",
+      "to": "kafka",
+      "label": "click",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 24
+    },
+    {
+      "id": "u7",
+      "from": "kafka",
+      "to": "analytics",
+      "label": "consume",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Redirect",
+      "items": [
+        "Cache-aside on code",
+        "302 keeps analytics accurate"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Create",
+      "items": [
+        "Unique ID → scrambled base62",
+        "7 chars = 3.5 trillion codes"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Analytics",
+      "items": [
+        "Clicks published async",
+        "Never slow the redirect"
+      ]
+    }
+  ]
+}
