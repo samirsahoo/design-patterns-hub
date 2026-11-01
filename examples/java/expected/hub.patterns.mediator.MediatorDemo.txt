@@ -1,0 +1,10 @@
+user types '1 Main St' into billing address
+  shipping=[, enabled=true]  submit enabled=false
+user toggles 'ship to billing address' -> true
+  shipping=[1 Main St, enabled=false]  submit enabled=true
+user types '2 High St' into billing address
+  shipping=[2 High St, enabled=false]  submit enabled=true
+user toggles 'ship to billing address' -> false
+  shipping=[2 High St, enabled=true]  submit enabled=true
+user types '9 Dock Rd' into shipping address
+  shipping=[9 Dock Rd, enabled=true]  submit enabled=true

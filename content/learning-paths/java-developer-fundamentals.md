@@ -29,6 +29,10 @@ steps:
     page: /java/advanced/concurrency-api
     also: [/java/advanced/functional-programming-and-streams]
     why: "Correctness under concurrency is where many production bugs and interview questions live."
+  - title: "Designing concurrent objects and concurrency patterns"
+    page: /java/advanced/concurrent-object-design
+    also: [/java/advanced/state-dependent-actions, /java/advanced/concurrency-design-patterns]
+    why: "Doug Lea's design principles: safety, liveness, guarded methods, worker threads, futures and cancellation."
   - title: "Virtual threads (Java 21)"
     page: /java/advanced/virtual-threads-and-structured-concurrency
     why: "Changes how blocking, thread-per-request code scales."

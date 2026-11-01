@@ -39,7 +39,9 @@ content/
   domain-driven-design/          strategic/, tactical/, advanced/
   microservices/                 fundamentals/, communication/, reliability/,
                                  data-consistency/, operations/, case-studies/
-  system-design/                 introduction, diagram building blocks, case-studies/
+  data-systems/                  data-intensive systems: storage, replication, partitioning,
+                                 transactions, consensus, batch and stream processing
+  system-design/                 introduction, diagram building blocks, building-blocks/, case-studies/
   comparisons/                   pattern and architecture comparisons
   glossary.md, about.md, search.md
 layouts/                         site templates (no third-party theme)

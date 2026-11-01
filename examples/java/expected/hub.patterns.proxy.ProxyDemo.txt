@@ -1,0 +1,8 @@
+Proxy chain built; nothing remote created yet.
+  [RemoteDocumentStore created: connected and index loaded]
+  [remote read wiki/onboarding]
+1: contents of wiki/onboarding
+2: contents of wiki/onboarding
+3: access to hr/salaries denied
+  [remote read hr/salaries]
+4: contents of hr/salaries

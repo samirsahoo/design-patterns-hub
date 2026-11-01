@@ -1,0 +1,7 @@
++ Home office bundle (-5%) 1527.60
+    - Laptop 1200.00
+    - Monitor 300.00
+    + Peripherals kit (-10%) 108.00
+        - Mouse 40.00
+        - Keyboard 80.00
+Cart: 5 items, total 1537.59

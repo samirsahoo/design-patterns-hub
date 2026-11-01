@@ -1,6 +1,6 @@
 ---
 title: "Java & Software Architecture Knowledge Hub"
-description: "A handbook on Core Java, Spring Framework, Spring Boot, persistence, security, testing, Spring Cloud microservices, design patterns, software architecture, Domain-Driven Design and system design, with diagrams, runnable Java examples, trade-offs and quick checks."
+description: "A handbook on Core Java, concurrency design, Spring Framework, Spring Boot, persistence, security, testing, Spring Cloud microservices, all 23 GoF design patterns, software architecture, Domain-Driven Design, data-intensive systems and system design, with diagrams, runnable Java examples, trade-offs and quick checks."
 featured:
   - /java/advanced/concurrency-api
   - /spring/core/applicationcontext-and-beanfactory
@@ -9,6 +9,10 @@ featured:
   - /spring/security/security-filter-chain
   - /microservices/reliability/circuit-breakers-and-resilience4j
   - /design-patterns/solid-principles
+  - /design-patterns/structural/decorator
+  - /data-systems/transactions-and-isolation
+  - /system-design/building-blocks/caching-strategies
+  - /system-design/case-studies/payment-system
   - /hexagonal-architecture/layered-vs-hexagonal
   - /self-review/quick-check
 ---
@@ -17,7 +21,7 @@ This handbook explains *why* designs work, not only *what* they are called. Ever
 
 **What's covered:**
 
-- **[Core Java](/java):** generics and type erasure, collections internals, exceptions, reflection and proxies, records, sealed types and pattern matching, the concurrency API, virtual threads, the Java Memory Model, garbage collection, lambdas and streams, and modules.
+- **[Core Java](/java):** generics and type erasure, collections internals, exceptions, reflection and proxies, records, sealed types and pattern matching, the concurrency API, virtual threads, the Java Memory Model, garbage collection, lambdas and streams, modules, and concurrency design (safety and liveness, guarded methods, worker threads, futures, cancellation and pipelines).
 - **[Spring](/spring):**
   - **Core:** IoC container, bean lifecycle and scopes, configuration, SpEL, AOP, events.
   - **Boot:** auto-configuration, externalized configuration, Actuator.
@@ -26,7 +30,10 @@ This handbook explains *why* designs work, not only *what* they are called. Ever
   - **Security:** the filter chain, OAuth2/OIDC/JWT, method security.
   - **Testing:** JUnit and Mockito, Testcontainers.
 - **[Microservices](/microservices):** service discovery, API gateway, centralized configuration, Resilience4j, observability with Micrometer and OpenTelemetry, and event-driven services with Spring Cloud Stream, Kafka and RabbitMQ.
-- **[Design patterns](/design-patterns), [software architecture](/software-architecture), [hexagonal architecture](/hexagonal-architecture), [DDD](/domain-driven-design) and [system design](/system-design).**
+- **[Design patterns](/design-patterns):** all 23 GoF patterns with runnable Java 21 examples, the OO design principles behind them, compound patterns (MVC) and side-by-side comparisons.
+- **[Data-intensive systems](/data-systems):** storage engines, encoding, replication, partitioning, transactions and isolation, distributed-systems faults, consistency and consensus, batch and stream processing.
+- **[System design](/system-design):** an 18-step framework, building blocks (load balancing, caching, consistent hashing, CAP, databases, IDs, queues, real-time push, deployment, security) and case studies (order management, URL shortener, rate limiter, payment system, proximity service).
+- **[Software architecture](/software-architecture), [hexagonal architecture](/hexagonal-architecture) and [DDD](/domain-driven-design).**
 - **[Self Review & Quick Check](/self-review):** questions for every area, a service review checklist and a quick reference.
 
 Other details:

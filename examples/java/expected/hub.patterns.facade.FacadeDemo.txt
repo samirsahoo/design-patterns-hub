@@ -1,0 +1,10 @@
+Order 1:
+  inventory: reserved 2 x SKU-1
+  payment: charged 99.00 to C-7
+  shipping: scheduled RES-SKU-1 for C-7
+  notify: order confirmed for C-7, shipment SHP-1
+=> CONFIRMED
+Order 2:
+  inventory: reserved 3 x SKU-1
+  inventory: released RES-SKU-1
+=> FAILED (card declined)

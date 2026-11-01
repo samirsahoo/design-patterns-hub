@@ -8,4 +8,7 @@ System design means turning ambiguous requirements into an architecture that you
 
 - [Introduction to System Design](/system-design/introduction) presents the framework, including how to estimate capacity and how to label assumptions.
 - [Diagram Building Blocks](/system-design/diagram-patterns) is a library of reusable Mermaid snippets for load balancers, caches, brokers, replication, sharding and other components.
-- [Case studies](/system-design/case-studies) apply the framework end to end.
+- [Building blocks](/system-design/building-blocks) explains the reusable components: scaling steps, load balancing, caching, consistent hashing, CAP and PACELC, database choice, ID generation, queues and delivery semantics, real-time communication, deployment strategies and security fundamentals.
+- [Case studies](/system-design/case-studies) apply the framework end to end: an order management system, a URL shortener, a rate limiter, a payment system and a proximity service.
+
+For the theory behind replication, partitioning, transactions and consensus, see [Data-Intensive Systems](/data-systems).

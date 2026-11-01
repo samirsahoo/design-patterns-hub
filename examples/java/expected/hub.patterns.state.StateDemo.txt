@@ -1,0 +1,10 @@
+  ORD-1: payment captured
+  ORD-1: handed to carrier
+  ORD-1: delivered
+ORD-1 is DELIVERED
+  ORD-2: payment captured
+  ORD-2: handed to carrier
+  ORD-2: rejected - cannot cancel an order that is SHIPPED
+ORD-2 is SHIPPED
+  ORD-3: cancelled before payment
+ORD-3 is CANCELLED

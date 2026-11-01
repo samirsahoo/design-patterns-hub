@@ -1,0 +1,10 @@
+First request:
+  -> GET /products/42
+      network GET /products/42 (call 1)
+    retry after: connection reset
+      network GET /products/42 (call 2)
+  <- 200 OK body-of-/products/42
+Second request:
+  -> GET /products/42
+    cache hit /products/42
+  <- 200 OK body-of-/products/42

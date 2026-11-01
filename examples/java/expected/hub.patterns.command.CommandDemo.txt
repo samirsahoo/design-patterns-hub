@@ -1,0 +1,11 @@
+After edits:  "Hello, world"
+After delete: "Hello,"
+  undo: delete 6 chars at 6
+              "Hello, world"
+  undo: insert ',' at 5
+              "Hello world"
+  redo: insert ',' at 5
+              "Hello, world"
+After macro:  "Hello, world Regards, Ana"
+  undo: macro 'sign off'
+              "Hello, world"

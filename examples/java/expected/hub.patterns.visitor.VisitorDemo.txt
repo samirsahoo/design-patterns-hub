@@ -1,0 +1,3 @@
+Total area: 94.54
+SVG: <g><circle cx="10" cy="10" r="5"/><rect x="0" y="0" width="4" height="3"/><g><rect x="20" y="20" width="2" height="2"/></g></g>
+(2.0 + 3.0) * 4.0 = 20.0

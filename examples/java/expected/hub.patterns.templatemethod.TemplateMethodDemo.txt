@@ -1,0 +1,7 @@
+Customers:
+  saving 2 customers
+ImportResult[source=customers.csv, imported=2, rejected=[not-an-email, Bob -> invalid email]]
+Stock feed:
+  upserting 2 stock levels
+  publishing StockUpdated event for 2 SKUs
+ImportResult[source=warehouse-feed, imported=2, rejected=[SKU-2|oops -> unparseable]]

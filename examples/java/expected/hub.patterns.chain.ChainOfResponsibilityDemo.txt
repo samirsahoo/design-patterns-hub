@@ -1,0 +1,7 @@
+ana     120 -> TeamLead approved 120
+raj    3200 -> Director approved 3200
+li    18000 -> Cfo approved 18000
+sam   20000 -> Rejected: nobody may approve 20000
+Pipeline: Auto-approved
+Pipeline: Rejected: amount must be positive
+Pipeline: Escalated to manual review

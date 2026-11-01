@@ -1,0 +1,12 @@
+Channel: email
+  [email to ops@example.com] URGENT (1/2)
+    Disk usage on db-1 is at 95 percent
+  [email to ops@example.com] URGENT (2/2)
+    Disk usage on db-1 is at 95 percent
+  [email to ana@example.com] Your daily digest (2 items)
+    - 3 new comments on your pull request
+    - Build 1042 passed
+Channel: sms
+  [sms to ops@example.com] URGENT (1/2): Disk usage on db-1 is at 95 percent
+  [sms to ops@example.com] URGENT (2/2): Disk usage on db-1 is at 95 percent
+  [sms to ana@example.com] Your daily digest (2 items): - 3 new comments on your pul...

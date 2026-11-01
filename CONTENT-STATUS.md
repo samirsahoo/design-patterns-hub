@@ -86,24 +86,81 @@ Inline code examples; every article ends with a Quick check. 11 Archify diagrams
 
 New sections: `/spring/boot` and `/self-review` (quick check, service review checklist, quick reference).
 
+## Published (batch 3, 2026-11-01): all GoF patterns, concurrency design, data-intensive systems, system design building blocks and case studies
+
+Sources studied for this batch: *Design Patterns* (GoF), *Head First Design Patterns*, Doug Lea's *Concurrent Programming in Java*, Kleppmann's *Designing Data-Intensive Applications*, the *ByteByteGo System Design Handbook* and handwritten system design notes. All text is original; the books are cited as references.
+
+Pattern articles include runnable examples under `examples/java/src/hub/patterns/<name>/` with expected output (19 new demos, all verified by `scripts/verify_java.py`).
+
+| # | Article | Path |
+|---|---|---|
+| 57 | Singleton | `/design-patterns/creational/singleton` |
+| 58 | Abstract Factory | `/design-patterns/creational/abstract-factory` |
+| 59 | Prototype | `/design-patterns/creational/prototype` |
+| 60 | Bridge | `/design-patterns/structural/bridge` |
+| 61 | Composite | `/design-patterns/structural/composite` |
+| 62 | Decorator | `/design-patterns/structural/decorator` |
+| 63 | Facade | `/design-patterns/structural/facade` |
+| 64 | Flyweight | `/design-patterns/structural/flyweight` |
+| 65 | Proxy | `/design-patterns/structural/proxy` |
+| 66 | Chain of Responsibility | `/design-patterns/behavioral/chain-of-responsibility` |
+| 67 | Command | `/design-patterns/behavioral/command` |
+| 68 | Interpreter | `/design-patterns/behavioral/interpreter` |
+| 69 | Iterator | `/design-patterns/behavioral/iterator` |
+| 70 | Mediator | `/design-patterns/behavioral/mediator` |
+| 71 | Memento | `/design-patterns/behavioral/memento` |
+| 72 | Observer | `/design-patterns/behavioral/observer` |
+| 73 | State | `/design-patterns/behavioral/state` |
+| 74 | Template Method | `/design-patterns/behavioral/template-method` |
+| 75 | Visitor | `/design-patterns/behavioral/visitor` |
+| 76 | OO Design Principles Behind the Patterns | `/design-patterns/oo-design-principles` |
+| 77 | Compound Patterns and MVC | `/design-patterns/compound-patterns-mvc` |
+| 78 | Strategy vs State vs Template Method | `/comparisons/strategy-state-template-method` |
+| 79 | Observer vs Mediator vs Event Bus | `/comparisons/observer-mediator-event-bus` |
+| 80 | Designing Concurrent Objects | `/java/advanced/concurrent-object-design` |
+| 81 | State-Dependent Actions | `/java/advanced/state-dependent-actions` |
+| 82 | Concurrency Design Patterns | `/java/advanced/concurrency-design-patterns` |
+| 83 | Reliability, Scalability and Maintainability | `/data-systems/reliability-scalability-maintainability` |
+| 84 | Data Models and Query Languages | `/data-systems/data-models-and-query-languages` |
+| 85 | Storage Engines | `/data-systems/storage-engines` |
+| 86 | Encoding and Schema Evolution | `/data-systems/encoding-and-schema-evolution` |
+| 87 | Replication | `/data-systems/replication` |
+| 88 | Partitioning (Sharding) | `/data-systems/partitioning` |
+| 89 | Transactions and Isolation Levels | `/data-systems/transactions-and-isolation` |
+| 90 | The Trouble with Distributed Systems | `/data-systems/distributed-systems-faults` |
+| 91 | Consistency and Consensus | `/data-systems/consistency-and-consensus` |
+| 92 | Batch Processing | `/data-systems/batch-processing` |
+| 93 | Stream Processing | `/data-systems/stream-processing` |
+| 94 | Scaling from Zero to Millions of Users | `/system-design/building-blocks/scaling-from-zero-to-millions` |
+| 95 | Load Balancing and Proxies | `/system-design/building-blocks/load-balancing` |
+| 96 | Caching Strategies | `/system-design/building-blocks/caching-strategies` |
+| 97 | Consistent Hashing | `/system-design/building-blocks/consistent-hashing` |
+| 98 | CAP Theorem and PACELC | `/system-design/building-blocks/cap-theorem-and-pacelc` |
+| 99 | Choosing a Database | `/system-design/building-blocks/choosing-a-database` |
+| 100 | Unique ID Generation | `/system-design/building-blocks/unique-id-generation` |
+| 101 | Message Queues and Delivery Semantics | `/system-design/building-blocks/message-queues-and-delivery-semantics` |
+| 102 | Long Polling, WebSockets and SSE | `/system-design/building-blocks/real-time-communication` |
+| 103 | Deployment Strategies | `/system-design/building-blocks/deployment-strategies` |
+| 104 | HTTPS, Password Storage and API Request Signing | `/system-design/building-blocks/security-fundamentals` |
+| 105 | Designing a URL Shortener | `/system-design/case-studies/url-shortener` |
+| 106 | Designing a Rate Limiter | `/system-design/case-studies/rate-limiter` |
+| 107 | Designing a Payment System | `/system-design/case-studies/payment-system` |
+| 108 | Designing a Proximity Service | `/system-design/case-studies/proximity-service` |
+
+New sections: `/data-systems` (Data-Intensive Systems) and `/system-design/building-blocks`.
+
 ## Suggested next batches
 
 Batches are chosen so that each one completes a learning-path stretch.
 
-- **Batch 2 — Creational and structural patterns:** Singleton (thread safety, enum
-  singleton, why global state hurts testing), Abstract Factory, Prototype, Decorator,
-  Proxy, Facade, Composite. Comparison: Strategy vs State vs Template Method.
-- **Batch 3 — Remaining patterns:** Bridge, Flyweight, Chain of Responsibility,
-  Command, Interpreter, Iterator, Mediator, Memento, Observer, State, Template Method,
-  Visitor.
 - **Batch 4 — Java fundamentals path:** JVM/JRE/JDK, collections, generics,
   exceptions, records and enums, concurrency basics, virtual threads.
 - **Batch 5 — Spring core and data:** ApplicationContext and bean lifecycle, AOP and
   proxies, transactions and propagation, N+1, Spring Security basics.
 - **Batch 6 — Microservices reliability and data:** timeouts and retries, circuit
   breaker, idempotency, saga, transactional outbox, CQRS.
-- **Batch 7 — System design case studies:** URL shortener, rate limiter, notification
-  service.
+- **Next system design case studies:** notification service, file upload service,
+  inventory management, flash sale system.
 
 ## Planned (by section)
 

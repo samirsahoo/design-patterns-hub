@@ -1,0 +1,8 @@
+Before first use of AppConfig
+  (AppConfig constructor runs now)
+Environment: dev
+Same AppConfig instance: true
+Unique ids from 8 threads x 1000 calls: 8000
+Distinct ConnectionRegistry instances: 1
+Production invoice: INV-08001
+Test invoice:       INV-00042

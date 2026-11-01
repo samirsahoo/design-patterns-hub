@@ -1,0 +1,6 @@
+AST: Or[left=And[left=Equals[name=plan, value=pro], right=Not[inner=In[name=country, values=[US, CA]]]], right=Equals[name=beta, value=true]]
+ana  -> true
+bob  -> false
+cy   -> true
+dee  -> false
+Invalid rule: Unexpected end of rule

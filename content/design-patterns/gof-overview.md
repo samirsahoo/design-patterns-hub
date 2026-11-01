@@ -2,7 +2,7 @@
 title: "All 23 GoF Patterns: Overview and Classification"
 linkTitle: "GoF Overview"
 description: "A map of the 23 Gang of Four design patterns: the three categories, class versus object scope, one-line intents, JDK examples, and how to choose between patterns that look alike."
-weight: 3
+weight: 4
 difficulty: beginner
 status: complete
 tags: [design-patterns, gof, creational, structural, behavioral]
@@ -53,11 +53,11 @@ Creational patterns hide *which* concrete class is instantiated and *how*. Clien
 
 | # | Pattern | Intent in one line | Scope | In the JDK or Spring |
 |---|---|---|---|---|
-| 1 | Singleton | Ensure a class has one instance and provide a global access point to it. | Object | `Runtime.getRuntime()` |
+| 1 | [Singleton](/design-patterns/creational/singleton) | Ensure a class has one instance and provide a global access point to it. | Object | `Runtime.getRuntime()` |
 | 2 | [Factory Method](/design-patterns/creational/factory-method) | Let subclasses decide which class to instantiate. | Class | `Collection.iterator()` (each collection creates its own iterator) |
-| 3 | Abstract Factory | Create families of related objects without naming their concrete classes. | Object | `javax.xml.parsers.DocumentBuilderFactory` |
+| 3 | [Abstract Factory](/design-patterns/creational/abstract-factory) | Create families of related objects without naming their concrete classes. | Object | `javax.xml.parsers.DocumentBuilderFactory` |
 | 4 | [Builder](/design-patterns/creational/builder) | Separate the construction of a complex object from its representation. | Object | `StringBuilder`, `HttpRequest.newBuilder()` |
-| 5 | Prototype | Create new objects by copying an existing instance. | Object | `Object.clone()` (with well-known caveats) |
+| 5 | [Prototype](/design-patterns/creational/prototype) | Create new objects by copying an existing instance. | Object | `Object.clone()` (with well-known caveats) |
 
 ### Structural patterns
 
@@ -66,12 +66,12 @@ Structural patterns describe how objects are wired together. Several of them hav
 | # | Pattern | Intent in one line | Scope | In the JDK or Spring |
 |---|---|---|---|---|
 | 6 | [Adapter](/design-patterns/structural/adapter) | Convert one interface into another that clients expect. | Class or object | `Arrays.asList`, `InputStreamReader` |
-| 7 | Bridge | Decouple an abstraction from its implementation so both can vary. | Object | JDBC: `DriverManager` and `Connection` over vendor drivers |
-| 8 | Composite | Treat individual objects and groups of objects uniformly. | Object | AWT/Swing `Container` holding `Component`s |
-| 9 | Decorator | Attach responsibilities to an object dynamically by wrapping it. | Object | `BufferedInputStream`, `Collections.unmodifiableList` |
-| 10 | Facade | Provide one simple interface to a complex subsystem. | Object | Spring's `JdbcTemplate` over raw JDBC (resembles) |
-| 11 | Flyweight | Share fine-grained objects to support large numbers efficiently. | Object | `Integer.valueOf` cache for −128…127 |
-| 12 | Proxy | Provide a placeholder that controls access to another object. | Object | `java.lang.reflect.Proxy`, Spring AOP proxies |
+| 7 | [Bridge](/design-patterns/structural/bridge) | Decouple an abstraction from its implementation so both can vary. | Object | JDBC: `DriverManager` and `Connection` over vendor drivers |
+| 8 | [Composite](/design-patterns/structural/composite) | Treat individual objects and groups of objects uniformly. | Object | AWT/Swing `Container` holding `Component`s |
+| 9 | [Decorator](/design-patterns/structural/decorator) | Attach responsibilities to an object dynamically by wrapping it. | Object | `BufferedInputStream`, `Collections.unmodifiableList` |
+| 10 | [Facade](/design-patterns/structural/facade) | Provide one simple interface to a complex subsystem. | Object | Spring's `JdbcTemplate` over raw JDBC (resembles) |
+| 11 | [Flyweight](/design-patterns/structural/flyweight) | Share fine-grained objects to support large numbers efficiently. | Object | `Integer.valueOf` cache for −128…127 |
+| 12 | [Proxy](/design-patterns/structural/proxy) | Provide a placeholder that controls access to another object. | Object | `java.lang.reflect.Proxy`, Spring AOP proxies |
 
 > [!NOTE] Adapter is the only dual-scope pattern
 > The GoF book lists Adapter under both scopes. A *class adapter* inherits from the adaptee. An *object adapter* holds a reference to it. In Java, which has single inheritance of classes, the object adapter is the usual choice.
@@ -82,17 +82,17 @@ Behavioral patterns are about algorithms and about who is responsible for what: 
 
 | # | Pattern | Intent in one line | Scope | In the JDK or Spring |
 |---|---|---|---|---|
-| 13 | Chain of Responsibility | Pass a request along a chain of handlers until one handles it. | Object | Servlet `FilterChain`, Spring Security filter chain |
-| 14 | Command | Encapsulate a request as an object. | Object | `Runnable`, `Callable` |
-| 15 | Interpreter | Represent a grammar and interpret sentences in it. | Class | `java.util.regex.Pattern` (internally), Spring Expression Language |
-| 16 | Iterator | Access elements sequentially without exposing the underlying structure. | Object | `java.util.Iterator` |
-| 17 | Mediator | Centralise complex communication between objects in one object. | Object | No clean JDK example; a dialog controller coordinating form widgets is the classic case |
-| 18 | Memento | Capture and restore an object's state without breaking encapsulation. | Object | Undo stacks in editors; rarely visible in library APIs |
-| 19 | Observer | Notify dependents automatically when an object changes. | Object | `java.util.concurrent.Flow`, Spring `ApplicationEvent` |
-| 20 | State | Let an object change behaviour when its internal state changes. | Object | Common in workflow engines; no canonical JDK example |
+| 13 | [Chain of Responsibility](/design-patterns/behavioral/chain-of-responsibility) | Pass a request along a chain of handlers until one handles it. | Object | Servlet `FilterChain`, Spring Security filter chain |
+| 14 | [Command](/design-patterns/behavioral/command) | Encapsulate a request as an object. | Object | `Runnable`, `Callable` |
+| 15 | [Interpreter](/design-patterns/behavioral/interpreter) | Represent a grammar and interpret sentences in it. | Class | `java.util.regex.Pattern` (internally), Spring Expression Language |
+| 16 | [Iterator](/design-patterns/behavioral/iterator) | Access elements sequentially without exposing the underlying structure. | Object | `java.util.Iterator` |
+| 17 | [Mediator](/design-patterns/behavioral/mediator) | Centralise complex communication between objects in one object. | Object | No clean JDK example; a dialog controller coordinating form widgets is the classic case |
+| 18 | [Memento](/design-patterns/behavioral/memento) | Capture and restore an object's state without breaking encapsulation. | Object | Undo stacks in editors; rarely visible in library APIs |
+| 19 | [Observer](/design-patterns/behavioral/observer) | Notify dependents automatically when an object changes. | Object | `java.util.concurrent.Flow`, Spring `ApplicationEvent` |
+| 20 | [State](/design-patterns/behavioral/state) | Let an object change behaviour when its internal state changes. | Object | Common in workflow engines; no canonical JDK example |
 | 21 | [Strategy](/design-patterns/behavioral/strategy) | Define interchangeable algorithms behind one interface. | Object | `Comparator`, Spring Security `PasswordEncoder` |
-| 22 | Template Method | Define an algorithm's skeleton and let subclasses fill in steps. | Class | `java.util.AbstractList`, `HttpServlet.service` |
-| 23 | Visitor | Add operations to an object structure without changing its classes. | Object | `java.nio.file.FileVisitor`, `javax.lang.model` element visitors |
+| 22 | [Template Method](/design-patterns/behavioral/template-method) | Define an algorithm's skeleton and let subclasses fill in steps. | Class | `java.util.AbstractList`, `HttpServlet.service` |
+| 23 | [Visitor](/design-patterns/behavioral/visitor) | Add operations to an object structure without changing its classes. | Object | `java.nio.file.FileVisitor`, `javax.lang.model` element visitors |
 
 > [!VERSION] Examples refer to Java 21
 > JDK examples are drawn from the Java SE 21 API. Some are clean implementations of a pattern (`Iterator`, `Comparator`). Others only *resemble* it, and the table says so. The [Patterns in Spring](/spring/patterns-in-spring) section applies the same standard to Spring.

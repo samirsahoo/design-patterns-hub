@@ -1,0 +1,4 @@
+Now:          [circle, square, triangle, scribble] stroke=red
+Checkpoints:  [after triangle, after red square] (oldest dropped, limit 2)
+Restore 'after triangle': [circle, square, triangle] stroke=red
+Restore 'after red square': [circle, square] stroke=red

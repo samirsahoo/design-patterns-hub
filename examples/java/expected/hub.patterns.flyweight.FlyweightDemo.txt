@@ -1,0 +1,5 @@
+Markers: 100000
+Distinct MarkerStyle objects: 3
+Same style instance reused: true
+Icon memory shared: 48 KB vs unshared: 1,600,000 KB
+First draws: restaurant@48.0,2.0 hotel@48.00001,2.00001 museum@48.00002,2.00002

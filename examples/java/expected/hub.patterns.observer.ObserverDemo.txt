@@ -1,0 +1,8 @@
+Publish ORD-1:
+  email: thanks ana for order ORD-1
+  loyalty: +129 points for ana
+  analytics: revenue 129.90
+Publish ORD-2 (analytics unsubscribed):
+  email: thanks raj for order ORD-2
+  loyalty: +0 points for raj
+  observer failed: fraud check cannot score a zero-value order

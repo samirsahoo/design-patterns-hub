@@ -1,0 +1,6 @@
+== PostgreSQL
+SELECT "sku", "name" FROM "product" ORDER BY "sku" LIMIT 20 OFFSET 40
+INSERT INTO "product" ("sku", "name", "price") VALUES (?, ?, ?) ON CONFLICT ("sku") DO UPDATE SET "name" = EXCLUDED."name", "price" = EXCLUDED."price"
+== MySQL
+SELECT `sku`, `name` FROM `product` ORDER BY `sku` LIMIT 40, 20
+INSERT INTO `product` (`sku`, `name`, `price`) VALUES (?, ?, ?) AS new ON DUPLICATE KEY UPDATE `name` = new.`name`, `price` = new.`price`
