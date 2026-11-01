@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "Resilience4j Circuit Breaker States",
+    "viewBox": [
+      1030,
+      620
+    ],
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "normal",
+        "label": "Tripping",
+        "focus": [
+          "closed",
+          "threshold",
+          "open"
+        ],
+        "note": "Calls are recorded in a sliding window; above the threshold the breaker opens."
+      },
+      {
+        "id": "protect",
+        "label": "Protecting",
+        "focus": [
+          "open",
+          "fallback"
+        ],
+        "note": "While OPEN, calls fail fast and a fallback answers."
+      },
+      {
+        "id": "probe",
+        "label": "Recovery",
+        "focus": [
+          "open",
+          "halfopen",
+          "trialfail",
+          "recovered"
+        ],
+        "note": "After the wait duration, trial calls decide whether to close or reopen."
+      }
+    ]
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "Healthy"
+    },
+    {
+      "id": "waiting",
+      "label": "Waiting"
+    },
+    {
+      "id": "exceptions",
+      "label": "Protecting"
+    },
+    {
+      "id": "terminal",
+      "label": "Manual"
+    }
+  ],
+  "states": [
+    {
+      "id": "closed",
+      "type": "start",
+      "label": "CLOSED",
+      "sublabel": "calls pass",
+      "lane": "main",
+      "col": 0,
+      "step": "01"
+    },
+    {
+      "id": "threshold",
+      "type": "decision",
+      "label": "Threshold hit?",
+      "sublabel": "failure / slow rate",
+      "lane": "main",
+      "col": 1,
+      "step": "02"
+    },
+    {
+      "id": "open",
+      "type": "active",
+      "label": "OPEN",
+      "sublabel": "fail fast",
+      "lane": "main",
+      "col": 2,
+      "step": "03"
+    },
+    {
+      "id": "halfopen",
+      "type": "active",
+      "label": "HALF_OPEN",
+      "sublabel": "trial calls",
+      "lane": "main",
+      "col": 3,
+      "step": "04"
+    },
+    {
+      "id": "recovered",
+      "type": "success",
+      "label": "CLOSED again",
+      "sublabel": "recovered",
+      "lane": "main",
+      "col": 4,
+      "step": "05"
+    },
+    {
+      "id": "fallback",
+      "type": "waiting",
+      "label": "Fallback",
+      "sublabel": "cache, default",
+      "lane": "waiting",
+      "col": 0
+    },
+    {
+      "id": "trialfail",
+      "type": "failure",
+      "label": "Trial failed",
+      "sublabel": "reopen",
+      "lane": "exceptions",
+      "col": 1
+    },
+    {
+      "id": "forced",
+      "type": "neutral",
+      "label": "FORCED_OPEN",
+      "sublabel": "ops override",
+      "lane": "terminal",
+      "col": 2,
+      "yOffset": -12
+    }
+  ],
+  "transitions": [
+    {
+      "id": "serve",
+      "from": "open",
+      "to": "fallback",
+      "variant": "dashed"
+    },
+    {
+      "id": "fail",
+      "from": "halfopen",
+      "to": "trialfail",
+      "variant": "security"
+    },
+    {
+      "id": "reopen",
+      "from": "trialfail",
+      "to": "open",
+      "variant": "emphasis"
+    },
+    {
+      "id": "ops",
+      "from": "recovered",
+      "to": "forced",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Fail fast",
+      "items": [
+        "Protect callers and the struggling dependency"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Self-healing",
+      "items": [
+        "Trial calls decide when to close"
+      ]
+    }
+  ]
+}

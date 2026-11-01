@@ -74,7 +74,7 @@ timeZone = "UTC"
   priority = 0.5
 
 [params]
-  description = "An open handbook on Java, design patterns, software architecture, Domain-Driven Design, microservices, and system design — with diagrams, runnable Java examples, trade-offs, and interview questions."
+  description = "A handbook on Core Java, Spring, Spring Boot, persistence, security, testing, Spring Cloud microservices, design patterns, architecture, DDD and system design — with diagrams, runnable examples, trade-offs and quick checks."
   tagline = "Understand the concepts. Explore the diagrams. Build better software."
   # Set automatically in CI from the GitHub repository (HUGO_PARAMS_REPOURL).
   # Leave empty locally to hide repository links, or set it to your repo URL.

@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "Spring Singleton Bean Lifecycle",
+    "viewBox": [
+      1030,
+      620
+    ],
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "create",
+        "label": "Creation",
+        "focus": [
+          "defined",
+          "instantiated",
+          "populated",
+          "initialised",
+          "inuse"
+        ],
+        "note": "Instantiate, inject, initialise, then serve."
+      },
+      {
+        "id": "end",
+        "label": "Shutdown",
+        "focus": [
+          "inuse",
+          "destroying",
+          "destroyed"
+        ],
+        "note": "On context close, destroy callbacks run in reverse dependency order."
+      }
+    ]
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "Creation"
+    },
+    {
+      "id": "waiting",
+      "label": "Circular reference"
+    },
+    {
+      "id": "exceptions",
+      "label": "Failure"
+    },
+    {
+      "id": "terminal",
+      "label": "Shutdown"
+    }
+  ],
+  "states": [
+    {
+      "id": "defined",
+      "type": "start",
+      "label": "Defined",
+      "sublabel": "BeanDefinition",
+      "lane": "main",
+      "col": 0,
+      "step": "01"
+    },
+    {
+      "id": "instantiated",
+      "type": "active",
+      "label": "Instantiated",
+      "sublabel": "constructor",
+      "lane": "main",
+      "col": 1,
+      "step": "02"
+    },
+    {
+      "id": "populated",
+      "type": "active",
+      "label": "Populated",
+      "sublabel": "deps, Aware",
+      "lane": "main",
+      "col": 2,
+      "step": "03"
+    },
+    {
+      "id": "initialised",
+      "type": "active",
+      "label": "Initialised",
+      "sublabel": "@PostConstruct",
+      "lane": "main",
+      "col": 3,
+      "step": "04"
+    },
+    {
+      "id": "inuse",
+      "type": "success",
+      "label": "In use",
+      "sublabel": "maybe proxied",
+      "lane": "main",
+      "col": 4,
+      "step": "05"
+    },
+    {
+      "id": "early",
+      "type": "waiting",
+      "label": "Early reference",
+      "sublabel": "setter cycles only",
+      "lane": "waiting",
+      "col": 0
+    },
+    {
+      "id": "failed",
+      "type": "failure",
+      "label": "Creation failed",
+      "sublabel": "context aborts",
+      "lane": "exceptions",
+      "col": 1
+    },
+    {
+      "id": "destroying",
+      "type": "neutral",
+      "label": "Destroying",
+      "sublabel": "@PreDestroy",
+      "lane": "terminal",
+      "col": 1,
+      "yOffset": -12
+    },
+    {
+      "id": "destroyed",
+      "type": "neutral",
+      "label": "Destroyed",
+      "sublabel": "context closed",
+      "lane": "terminal",
+      "col": 2,
+      "yOffset": -12
+    }
+  ],
+  "transitions": [
+    {
+      "id": "cycle",
+      "from": "populated",
+      "to": "early",
+      "label": "cycle",
+      "variant": "dashed",
+      "labelDy": 24,
+      "labelDx": -56
+    },
+    {
+      "id": "resolved",
+      "from": "early",
+      "to": "populated",
+      "variant": "emphasis"
+    },
+    {
+      "id": "boom",
+      "from": "initialised",
+      "to": "failed",
+      "variant": "security"
+    },
+    {
+      "id": "close",
+      "from": "inuse",
+      "to": "destroyed",
+      "variant": "dashed"
+    },
+    {
+      "id": "cleanup",
+      "from": "destroying",
+      "to": "destroyed",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Prefer constructors",
+      "items": [
+        "Constructor injection makes cycles fail fast"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Callbacks",
+      "items": [
+        "@PostConstruct to start, @PreDestroy to release"
+      ]
+    }
+  ]
+}

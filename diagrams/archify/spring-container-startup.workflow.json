@@ -1,0 +1,130 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "How the Spring ApplicationContext Starts",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "define",
+      "label": "Bean definitions"
+    },
+    {
+      "id": "create",
+      "label": "Bean creation"
+    },
+    {
+      "id": "ready",
+      "label": "Running context"
+    }
+  ],
+  "mainPath": [
+    "scan",
+    "bfpp",
+    "instantiate",
+    "bpp",
+    "refreshed"
+  ],
+  "nodes": [
+    {
+      "id": "scan",
+      "lane": "define",
+      "col": 0,
+      "type": "external",
+      "label": "Read configuration",
+      "sublabel": "@Configuration, scanning",
+      "width": 132
+    },
+    {
+      "id": "bfpp",
+      "lane": "define",
+      "col": 1,
+      "type": "backend",
+      "label": "Tune definitions",
+      "sublabel": "BFPostProcessors",
+      "width": 132
+    },
+    {
+      "id": "instantiate",
+      "lane": "create",
+      "col": 2,
+      "type": "backend",
+      "label": "Create + inject",
+      "sublabel": "constructor, Aware",
+      "width": 132
+    },
+    {
+      "id": "bpp",
+      "lane": "create",
+      "col": 3,
+      "type": "security",
+      "label": "BeanPostProcessors",
+      "sublabel": "init, AOP proxies",
+      "width": 132
+    },
+    {
+      "id": "refreshed",
+      "lane": "ready",
+      "col": 4,
+      "type": "frontend",
+      "label": "Context refreshed",
+      "sublabel": "events, runners",
+      "width": 132
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "from": "scan",
+      "to": "bfpp",
+      "label": "definitions",
+      "variant": "emphasis"
+    },
+    {
+      "id": "e2",
+      "from": "bfpp",
+      "to": "instantiate",
+      "label": "singletons"
+    },
+    {
+      "id": "e5",
+      "from": "bpp",
+      "to": "refreshed",
+      "label": "ready",
+      "variant": "emphasis"
+    },
+    {
+      "id": "e4",
+      "from": "instantiate",
+      "to": "bpp",
+      "label": "initialise"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Definitions first",
+      "items": [
+        "Recipes are collected before any bean exists"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Proxies late",
+      "items": [
+        "AOP wraps beans in a post-processor"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Then ready",
+      "items": [
+        "ContextRefreshedEvent, runners, traffic"
+      ]
+    }
+  ]
+}

@@ -10,7 +10,7 @@ When you publish an article:
 2. Remove it from the `planned:` list in its section's `_index.md`.
 3. Add `page:` to any learning-path step that covers it.
 
-Last updated: 2026-10-17
+Last updated: 2026-11-01
 
 ## Published (batch 1)
 
@@ -36,6 +36,55 @@ Last updated: 2026-10-17
 Supporting pages: Diagram Building Blocks (`/system-design/diagram-patterns`), Adapter vs
 Decorator vs Proxy vs Facade, Factory Patterns Compared, Glossary, About, six learning
 paths.
+
+## Published (batch 2, 2026-11-01): Java, Spring, Spring Boot, data, security, testing, Spring Cloud
+
+Inline code examples; every article ends with a Quick check. 11 Archify diagrams under `diagrams/archify/`.
+
+| # | Article | Path |
+|---|---|---|
+| 17 | Generics, Wildcards and Type Erasure | `/java/fundamentals/generics-and-type-erasure` |
+| 18 | The Java Collections Framework: Internal Architecture | `/java/fundamentals/collections-framework` |
+| 19 | Exception Handling and Try-With-Resources | `/java/fundamentals/exceptions-and-try-with-resources` |
+| 20 | Reflection API and Dynamic Proxies | `/java/fundamentals/reflection-and-dynamic-proxies` |
+| 21 | Modern Java: Records, Sealed Classes and Pattern Matching | `/java/fundamentals/modern-java-features` |
+| 22 | The Java Concurrency API | `/java/advanced/concurrency-api` |
+| 23 | Virtual Threads, Structured Concurrency and Scoped Values | `/java/advanced/virtual-threads-and-structured-concurrency` |
+| 24 | The Java Memory Model and Happens-Before | `/java/advanced/java-memory-model` |
+| 25 | Garbage Collection: G1, ZGC and Tuning Basics | `/java/advanced/garbage-collection` |
+| 26 | Functional Programming: Lambdas, Method References and Streams | `/java/advanced/functional-programming-and-streams` |
+| 27 | The Java Platform Module System | `/java/advanced/java-module-system` |
+| 28 | ApplicationContext and BeanFactory | `/spring/core/applicationcontext-and-beanfactory` |
+| 29 | Bean Lifecycle and Scopes | `/spring/core/bean-lifecycle-and-scopes` |
+| 30 | Configuration, @Bean, Component Scanning and Profiles | `/spring/core/configuration-and-component-scanning` |
+| 31 | Spring Expression Language | `/spring/core/spring-expression-language` |
+| 32 | AOP, Advice Types and Proxies | `/spring/core/aop-and-proxies` |
+| 33 | Application Events and Listeners | `/spring/core/application-events` |
+| 34 | Auto-Configuration and @ConditionalOn* | `/spring/boot/auto-configuration-and-conditions` |
+| 35 | Externalized Configuration and @ConfigurationProperties | `/spring/boot/externalized-configuration` |
+| 36 | Actuator and Custom Endpoints | `/spring/boot/actuator-and-custom-endpoints` |
+| 37 | Spring MVC Architecture | `/spring/web/spring-mvc-architecture` |
+| 38 | RESTful API Design and Global Exception Handling | `/spring/web/rest-api-design-and-error-handling` |
+| 39 | Spring WebFlux and Project Reactor | `/spring/web/webflux-and-reactive-programming` |
+| 40 | Spring Data JPA and the Hibernate Lifecycle | `/spring/data/spring-data-jpa-and-hibernate` |
+| 41 | Entity Mappings and Fetch Strategies | `/spring/data/entity-mappings-and-fetch-strategies` |
+| 42 | JPQL, Criteria API and Specifications | `/spring/data/jpql-and-criteria-api` |
+| 43 | Transactions: @Transactional, Propagation and Isolation | `/spring/data/transactions` |
+| 44 | Auditing and Migrations (Flyway, Liquibase) | `/spring/data/auditing-and-migrations` |
+| 45 | Spring Cache and Redis | `/spring/data/caching` |
+| 46 | Spring Security Filter Chain | `/spring/security/security-filter-chain` |
+| 47 | OAuth 2.0, OpenID Connect and JWT | `/spring/security/oauth2-oidc-and-jwt` |
+| 48 | Method-Level Security | `/spring/security/method-level-security` |
+| 49 | Unit Testing with JUnit and Mockito | `/spring/production/unit-testing-junit-mockito` |
+| 50 | Integration Testing with Testcontainers | `/spring/production/integration-testing` |
+| 51 | Service Discovery | `/microservices/fundamentals/service-discovery` |
+| 52 | API Gateway with Spring Cloud Gateway | `/microservices/fundamentals/api-gateway` |
+| 53 | Centralized Configuration | `/microservices/fundamentals/centralized-configuration` |
+| 54 | Circuit Breakers and Resilience4j | `/microservices/reliability/circuit-breakers-and-resilience4j` |
+| 55 | Observability with Micrometer and OpenTelemetry | `/microservices/operations/observability-micrometer-opentelemetry` |
+| 56 | Event-Driven Microservices with Spring Cloud Stream | `/microservices/communication/event-driven-spring-cloud-stream` |
+
+New sections: `/spring/boot` and `/self-review` (quick check, service review checklist, quick reference).
 
 ## Suggested next batches
 

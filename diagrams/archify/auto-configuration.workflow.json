@@ -1,0 +1,161 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "How Spring Boot Auto-Configuration Decides",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "app",
+      "label": "Your application"
+    },
+    {
+      "id": "boot",
+      "label": "Spring Boot",
+      "variant": "exception"
+    },
+    {
+      "id": "ctx",
+      "label": "Context"
+    }
+  ],
+  "mainPath": [
+    "main",
+    "user",
+    "imports",
+    "conditions",
+    "register",
+    "running"
+  ],
+  "nodes": [
+    {
+      "id": "main",
+      "lane": "app",
+      "col": 0,
+      "type": "external",
+      "label": "Application",
+      "sublabel": "@SpringBootApplication",
+      "width": 132
+    },
+    {
+      "id": "user",
+      "lane": "app",
+      "col": 1,
+      "type": "frontend",
+      "label": "Your beans first",
+      "sublabel": "scanning, @Bean",
+      "width": 132
+    },
+    {
+      "id": "imports",
+      "lane": "boot",
+      "col": 2,
+      "type": "backend",
+      "label": "Candidates",
+      "sublabel": "AutoConfiguration.imports",
+      "width": 132
+    },
+    {
+      "id": "conditions",
+      "lane": "boot",
+      "col": 3,
+      "type": "security",
+      "label": "Evaluate conditions",
+      "sublabel": "class, bean, property",
+      "width": 132
+    },
+    {
+      "id": "skipped",
+      "lane": "boot",
+      "col": 4,
+      "type": "database",
+      "label": "Skipped",
+      "sublabel": "condition report",
+      "width": 132
+    },
+    {
+      "id": "register",
+      "lane": "ctx",
+      "col": 4,
+      "type": "backend",
+      "label": "Register defaults",
+      "sublabel": "@ConditionalOnMissingBean",
+      "width": 132
+    },
+    {
+      "id": "running",
+      "lane": "ctx",
+      "col": 5,
+      "type": "frontend",
+      "label": "Running app",
+      "sublabel": "your overrides win",
+      "width": 132
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "from": "main",
+      "to": "user",
+      "variant": "emphasis"
+    },
+    {
+      "id": "e2",
+      "from": "user",
+      "to": "imports",
+      "label": "then"
+    },
+    {
+      "id": "e3",
+      "from": "imports",
+      "to": "conditions"
+    },
+    {
+      "id": "e4",
+      "from": "conditions",
+      "to": "register",
+      "label": "match",
+      "variant": "emphasis"
+    },
+    {
+      "id": "e5",
+      "from": "conditions",
+      "to": "skipped",
+      "label": "no match",
+      "variant": "dashed"
+    },
+    {
+      "id": "e6",
+      "from": "register",
+      "to": "running",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Opinionated defaults",
+      "items": [
+        "Configured only when you have not"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Conditions",
+      "items": [
+        "Classpath, beans and properties decide"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Debuggable",
+      "items": [
+        "--debug prints the condition report"
+      ]
+    }
+  ]
+}

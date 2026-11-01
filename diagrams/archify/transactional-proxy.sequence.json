@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "How @Transactional Works Through a Proxy",
+    "viewBox": [
+      1080,
+      660
+    ],
+    "column_fit": "spread",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "begin",
+        "label": "Begin",
+        "focus": [
+          "caller",
+          "proxy",
+          "txm"
+        ],
+        "note": "The caller holds a proxy; the interceptor asks the transaction manager to begin or join."
+      },
+      {
+        "id": "work",
+        "label": "Work",
+        "focus": [
+          "proxy",
+          "target",
+          "db"
+        ],
+        "note": "The real method runs on a connection bound to the thread."
+      },
+      {
+        "id": "end",
+        "label": "Commit or roll back",
+        "focus": [
+          "proxy",
+          "txm",
+          "db"
+        ],
+        "note": "Runtime exceptions roll back by default; checked exceptions commit unless configured."
+      }
+    ]
+  },
+  "participants": [
+    {
+      "id": "caller",
+      "type": "frontend",
+      "label": "Controller",
+      "sublabel": "caller"
+    },
+    {
+      "id": "proxy",
+      "type": "security",
+      "label": "Proxy",
+      "sublabel": "TransactionInterceptor"
+    },
+    {
+      "id": "txm",
+      "type": "backend",
+      "label": "Transaction manager",
+      "sublabel": "JpaTransactionManager"
+    },
+    {
+      "id": "target",
+      "type": "backend",
+      "label": "OrderService",
+      "sublabel": "real bean"
+    },
+    {
+      "id": "db",
+      "type": "database",
+      "label": "Database",
+      "sublabel": "connection"
+    }
+  ],
+  "segments": [
+    {
+      "from": 140,
+      "to": 286,
+      "label": "Begin"
+    },
+    {
+      "from": 294,
+      "to": 430,
+      "label": "Business method"
+    },
+    {
+      "from": 438,
+      "to": 576,
+      "label": "Complete"
+    }
+  ],
+  "messages": [
+    {
+      "from": "caller",
+      "to": "proxy",
+      "y": 164,
+      "label": "placeOrder(cmd)",
+      "variant": "emphasis"
+    },
+    {
+      "from": "proxy",
+      "to": "txm",
+      "y": 200,
+      "label": "getTransaction(REQUIRED)",
+      "variant": "emphasis"
+    },
+    {
+      "from": "txm",
+      "to": "db",
+      "y": 236,
+      "label": "setAutoCommit(false)",
+      "variant": "default"
+    },
+    {
+      "from": "txm",
+      "to": "proxy",
+      "y": 272,
+      "label": "status (bound to thread)",
+      "variant": "return"
+    },
+    {
+      "from": "proxy",
+      "to": "target",
+      "y": 308,
+      "label": "invoke placeOrder",
+      "variant": "emphasis"
+    },
+    {
+      "from": "target",
+      "to": "db",
+      "y": 344,
+      "label": "INSERT, UPDATE",
+      "variant": "default"
+    },
+    {
+      "from": "target",
+      "to": "proxy",
+      "y": 380,
+      "label": "return or throw",
+      "variant": "return"
+    },
+    {
+      "from": "proxy",
+      "to": "txm",
+      "y": 452,
+      "label": "commit / rollback",
+      "variant": "security"
+    },
+    {
+      "from": "txm",
+      "to": "db",
+      "y": 488,
+      "label": "COMMIT or ROLLBACK",
+      "variant": "security"
+    },
+    {
+      "from": "proxy",
+      "to": "caller",
+      "y": 548,
+      "label": "result",
+      "variant": "return"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "proxy",
+      "from": 158,
+      "to": 556,
+      "type": "security"
+    },
+    {
+      "participant": "target",
+      "from": 302,
+      "to": 388,
+      "type": "backend"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Proxy only",
+      "items": [
+        "Self-invocation bypasses the proxy"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Rollback rules",
+      "items": [
+        "Unchecked exceptions roll back by default"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Propagation",
+      "items": [
+        "REQUIRED joins, REQUIRES_NEW suspends"
+      ]
+    }
+  ]
+}

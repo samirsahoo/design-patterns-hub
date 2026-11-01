@@ -4,10 +4,6 @@ description: "Logging, metrics, tracing, OpenTelemetry, deployment, containers, 
 weight: 50
 planned:
   - "Centralized logging"
-  - "Metrics"
-  - "Distributed tracing"
-  - "Correlation IDs"
-  - "OpenTelemetry fundamentals"
   - "Deployment strategies: rolling, blue–green, canary"
   - "Containers"
   - "Orchestration fundamentals"

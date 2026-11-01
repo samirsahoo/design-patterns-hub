@@ -3,10 +3,6 @@ title: "Reliability Patterns"
 description: "Timeouts, retries, circuit breakers, bulkheads, rate limiting, idempotency and graceful degradation."
 weight: 30
 planned:
-  - "Timeouts"
-  - "Retries and exponential backoff with jitter"
-  - "Circuit Breaker"
-  - "Bulkhead"
   - "Rate limiting"
   - "Idempotency"
   - "Load shedding"

@@ -8,7 +8,6 @@ planned:
   - "Messaging fundamentals"
   - "Kafka fundamentals"
   - "RabbitMQ fundamentals"
-  - "Event-driven integration"
   - "Request–response versus event-based communication"
 ---
 

@@ -8,9 +8,6 @@ planned:
   - "Database per service"
   - "API contracts and compatibility"
   - "Synchronous versus asynchronous communication"
-  - "Service discovery"
-  - "API gateways"
-  - "Configuration management"
   - "Inter-service authentication"
 ---
 

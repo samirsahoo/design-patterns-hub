@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "JPA Entity States and the Persistence Context",
+    "viewBox": [
+      1030,
+      620
+    ],
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "save",
+        "label": "Save and flush",
+        "focus": [
+          "transient",
+          "managed",
+          "flushed",
+          "committed"
+        ],
+        "note": "persist makes an entity managed; flush writes SQL; commit makes it durable."
+      },
+      {
+        "id": "detach",
+        "label": "Detached entities",
+        "focus": [
+          "managed",
+          "detached"
+        ],
+        "note": "After the persistence context closes, entities are detached; merge re-attaches a copy."
+      },
+      {
+        "id": "remove",
+        "label": "Removal",
+        "focus": [
+          "managed",
+          "removed",
+          "deleted"
+        ],
+        "note": "remove schedules a DELETE that runs at flush."
+      }
+    ]
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "Managed path"
+    },
+    {
+      "id": "waiting",
+      "label": "Detached"
+    },
+    {
+      "id": "exceptions",
+      "label": "Removal"
+    },
+    {
+      "id": "terminal",
+      "label": "Gone"
+    }
+  ],
+  "states": [
+    {
+      "id": "transient",
+      "type": "start",
+      "label": "Transient",
+      "sublabel": "new Order()",
+      "lane": "main",
+      "col": 0,
+      "step": "01"
+    },
+    {
+      "id": "managed",
+      "type": "active",
+      "label": "Managed",
+      "sublabel": "dirty checking",
+      "lane": "main",
+      "col": 1,
+      "step": "02"
+    },
+    {
+      "id": "flushed",
+      "type": "active",
+      "label": "Flushed",
+      "sublabel": "SQL sent",
+      "lane": "main",
+      "col": 2,
+      "step": "03"
+    },
+    {
+      "id": "committed",
+      "type": "decision",
+      "label": "Commit?",
+      "sublabel": "or rollback",
+      "lane": "main",
+      "col": 3,
+      "step": "04"
+    },
+    {
+      "id": "durable",
+      "type": "success",
+      "label": "Durable",
+      "sublabel": "row in database",
+      "lane": "main",
+      "col": 4,
+      "step": "05"
+    },
+    {
+      "id": "detached",
+      "type": "waiting",
+      "label": "Detached",
+      "sublabel": "context closed",
+      "lane": "waiting",
+      "col": 0
+    },
+    {
+      "id": "removed",
+      "type": "failure",
+      "label": "Removed",
+      "sublabel": "DELETE at flush",
+      "lane": "exceptions",
+      "col": 1
+    },
+    {
+      "id": "deleted",
+      "type": "neutral",
+      "label": "Deleted",
+      "sublabel": "row gone",
+      "lane": "terminal",
+      "col": 2,
+      "yOffset": -12
+    }
+  ],
+  "transitions": [
+    {
+      "id": "close",
+      "from": "flushed",
+      "to": "detached",
+      "label": "close",
+      "variant": "dashed",
+      "labelDy": 24,
+      "labelDx": -56
+    },
+    {
+      "id": "merge",
+      "from": "detached",
+      "to": "flushed",
+      "variant": "emphasis"
+    },
+    {
+      "id": "remove",
+      "from": "committed",
+      "to": "removed",
+      "variant": "security"
+    },
+    {
+      "id": "gone",
+      "from": "removed",
+      "to": "deleted",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Unit of work",
+      "items": [
+        "Changes to managed entities are saved automatically"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Lazy loading",
+      "items": [
+        "Needs an open persistence context"
+      ]
+    }
+  ]
+}

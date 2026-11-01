@@ -10,13 +10,9 @@ planned:
   - "Interfaces and abstract classes"
   - "Inheritance and composition"
   - "Encapsulation and polymorphism"
-  - "Exceptions: checked, unchecked and design guidelines"
-  - "Generics, wildcards and type erasure"
-  - "The Collections Framework"
   - "Strings and immutability"
   - "Enums and records"
   - "Annotations"
-  - "Reflection"
   - "I/O and NIO.2"
 ---
 

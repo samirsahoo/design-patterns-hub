@@ -1,0 +1,210 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "A Request Through Spring MVC",
+    "viewBox": [
+      1080,
+      660
+    ],
+    "column_fit": "spread",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "route",
+        "label": "Routing",
+        "focus": [
+          "client",
+          "filters",
+          "ds",
+          "mapping"
+        ],
+        "note": "Filters run first; the DispatcherServlet asks HandlerMappings which method handles the request."
+      },
+      {
+        "id": "invoke",
+        "label": "Invocation",
+        "focus": [
+          "ds",
+          "adapter",
+          "controller"
+        ],
+        "note": "The HandlerAdapter resolves arguments, validates, and calls the controller."
+      },
+      {
+        "id": "respond",
+        "label": "Response",
+        "focus": [
+          "controller",
+          "ds",
+          "client"
+        ],
+        "note": "Return values are converted to JSON; exceptions become Problem Details."
+      }
+    ]
+  },
+  "participants": [
+    {
+      "id": "client",
+      "type": "external",
+      "label": "Client",
+      "sublabel": "HTTP"
+    },
+    {
+      "id": "filters",
+      "type": "security",
+      "label": "Filter chain",
+      "sublabel": "security, CORS"
+    },
+    {
+      "id": "ds",
+      "type": "backend",
+      "label": "DispatcherServlet",
+      "sublabel": "front controller"
+    },
+    {
+      "id": "mapping",
+      "type": "database",
+      "label": "HandlerMapping",
+      "sublabel": "@RequestMapping"
+    },
+    {
+      "id": "adapter",
+      "type": "backend",
+      "label": "HandlerAdapter",
+      "sublabel": "args, validation"
+    },
+    {
+      "id": "controller",
+      "type": "frontend",
+      "label": "Controller",
+      "sublabel": "@RestController"
+    }
+  ],
+  "segments": [
+    {
+      "from": 140,
+      "to": 286,
+      "label": "Route"
+    },
+    {
+      "from": 294,
+      "to": 466,
+      "label": "Invoke"
+    },
+    {
+      "from": 474,
+      "to": 576,
+      "label": "Respond"
+    }
+  ],
+  "messages": [
+    {
+      "from": "client",
+      "to": "filters",
+      "y": 164,
+      "label": "GET /orders/42",
+      "variant": "emphasis"
+    },
+    {
+      "from": "filters",
+      "to": "ds",
+      "y": 200,
+      "label": "authenticated request",
+      "variant": "emphasis"
+    },
+    {
+      "from": "ds",
+      "to": "mapping",
+      "y": 236,
+      "label": "getHandler(request)",
+      "variant": "default"
+    },
+    {
+      "from": "mapping",
+      "to": "ds",
+      "y": 272,
+      "label": "handler + interceptors",
+      "variant": "return"
+    },
+    {
+      "from": "ds",
+      "to": "adapter",
+      "y": 308,
+      "label": "preHandle, then handle",
+      "variant": "emphasis"
+    },
+    {
+      "from": "adapter",
+      "to": "controller",
+      "y": 344,
+      "label": "getOrder(42)",
+      "variant": "emphasis"
+    },
+    {
+      "from": "controller",
+      "to": "adapter",
+      "y": 380,
+      "label": "OrderDto",
+      "variant": "return"
+    },
+    {
+      "from": "adapter",
+      "to": "ds",
+      "y": 416,
+      "label": "write JSON (Jackson)",
+      "variant": "return"
+    },
+    {
+      "from": "ds",
+      "to": "filters",
+      "y": 500,
+      "label": "200 OK or Problem Details",
+      "variant": "return"
+    },
+    {
+      "from": "filters",
+      "to": "client",
+      "y": 548,
+      "label": "response",
+      "variant": "return"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "ds",
+      "from": 194,
+      "to": 508,
+      "type": "backend"
+    },
+    {
+      "participant": "controller",
+      "from": 338,
+      "to": 388,
+      "type": "frontend"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Front controller",
+      "items": [
+        "One servlet routes every request"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Pluggable",
+      "items": [
+        "Mappings, adapters, resolvers, converters"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Errors",
+      "items": [
+        "@RestControllerAdvice returns ProblemDetail"
+      ]
+    }
+  ]
+}

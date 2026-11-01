@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "OAuth 2.0 Authorization Code Flow with PKCE",
+    "viewBox": [
+      1080,
+      660
+    ],
+    "column_fit": "spread",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "login",
+        "label": "Login",
+        "focus": [
+          "user",
+          "client",
+          "as"
+        ],
+        "note": "The client redirects to the authorization server with a PKCE challenge."
+      },
+      {
+        "id": "token",
+        "label": "Token exchange",
+        "focus": [
+          "client",
+          "as"
+        ],
+        "note": "The code plus verifier is exchanged for access, refresh and ID tokens."
+      },
+      {
+        "id": "api",
+        "label": "Call the API",
+        "focus": [
+          "client",
+          "rs"
+        ],
+        "note": "The resource server validates the access token locally using the JWKS."
+      }
+    ]
+  },
+  "participants": [
+    {
+      "id": "user",
+      "type": "external",
+      "label": "User",
+      "sublabel": "browser"
+    },
+    {
+      "id": "client",
+      "type": "frontend",
+      "label": "Client app",
+      "sublabel": "BFF / oauth2Login"
+    },
+    {
+      "id": "as",
+      "type": "security",
+      "label": "Authorization server",
+      "sublabel": "Keycloak, Entra ID"
+    },
+    {
+      "id": "rs",
+      "type": "backend",
+      "label": "Resource server",
+      "sublabel": "Spring API"
+    }
+  ],
+  "segments": [
+    {
+      "from": 140,
+      "to": 322,
+      "label": "Authenticate"
+    },
+    {
+      "from": 330,
+      "to": 430,
+      "label": "Exchange code"
+    },
+    {
+      "from": 438,
+      "to": 576,
+      "label": "Use token"
+    }
+  ],
+  "messages": [
+    {
+      "from": "user",
+      "to": "client",
+      "y": 164,
+      "label": "open app",
+      "variant": "emphasis"
+    },
+    {
+      "from": "client",
+      "to": "as",
+      "y": 200,
+      "label": "redirect: code_challenge",
+      "variant": "emphasis"
+    },
+    {
+      "from": "user",
+      "to": "as",
+      "y": 236,
+      "label": "log in + MFA + consent",
+      "variant": "emphasis"
+    },
+    {
+      "from": "as",
+      "to": "client",
+      "y": 272,
+      "label": "redirect: ?code=...",
+      "variant": "return"
+    },
+    {
+      "from": "client",
+      "to": "as",
+      "y": 344,
+      "label": "POST /token (code, verifier)",
+      "variant": "emphasis"
+    },
+    {
+      "from": "as",
+      "to": "client",
+      "y": 380,
+      "label": "access, refresh, ID token",
+      "variant": "return"
+    },
+    {
+      "from": "client",
+      "to": "rs",
+      "y": 452,
+      "label": "Authorization: Bearer",
+      "variant": "emphasis"
+    },
+    {
+      "from": "rs",
+      "to": "as",
+      "y": 488,
+      "label": "fetch JWKS (cached)",
+      "variant": "dashed"
+    },
+    {
+      "from": "rs",
+      "to": "client",
+      "y": 524,
+      "label": "200 OK",
+      "variant": "return"
+    },
+    {
+      "from": "client",
+      "to": "user",
+      "y": 560,
+      "label": "page rendered",
+      "variant": "return"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "client",
+      "from": 158,
+      "to": 568,
+      "type": "frontend"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "PKCE",
+      "items": [
+        "Stops stolen-code attacks; required in OAuth 2.1"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "OIDC",
+      "items": [
+        "The ID token says who logged in"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Local validation",
+      "items": [
+        "APIs verify JWTs with cached keys"
+      ]
+    }
+  ]
+}

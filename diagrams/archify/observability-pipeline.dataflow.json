@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Spring Boot Observability with Micrometer and OpenTelemetry",
+    "viewBox": [
+      1080,
+      620
+    ],
+    "quality_profile": "showcase"
+  },
+  "stages": [
+    {
+      "label": "Instrument"
+    },
+    {
+      "label": "Export"
+    },
+    {
+      "label": "Collect"
+    },
+    {
+      "label": "Store"
+    },
+    {
+      "label": "Use"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "app",
+      "type": "backend",
+      "label": "Spring Boot app",
+      "sublabel": "Observation API",
+      "stage": 0,
+      "row": 0
+    },
+    {
+      "id": "logs",
+      "type": "frontend",
+      "label": "Logs",
+      "sublabel": "trace IDs in MDC",
+      "stage": 0,
+      "row": 2
+    },
+    {
+      "id": "micrometer",
+      "type": "messagebus",
+      "label": "Micrometer",
+      "sublabel": "metrics + tracing",
+      "stage": 1,
+      "row": 1
+    },
+    {
+      "id": "collector",
+      "type": "messagebus",
+      "label": "OTel Collector",
+      "sublabel": "batch, sample",
+      "stage": 2,
+      "row": 1
+    },
+    {
+      "id": "prom",
+      "type": "database",
+      "label": "Metrics",
+      "sublabel": "Prometheus",
+      "stage": 3,
+      "row": 0
+    },
+    {
+      "id": "tempo",
+      "type": "database",
+      "label": "Traces",
+      "sublabel": "Tempo, Jaeger",
+      "stage": 3,
+      "row": 1
+    },
+    {
+      "id": "loki",
+      "type": "database",
+      "label": "Logs",
+      "sublabel": "Loki, Elastic",
+      "stage": 3,
+      "row": 2
+    },
+    {
+      "id": "grafana",
+      "type": "frontend",
+      "label": "Dashboards",
+      "sublabel": "Grafana, SLOs",
+      "stage": 4,
+      "row": 0
+    },
+    {
+      "id": "alerts",
+      "type": "security",
+      "label": "Alerts",
+      "sublabel": "on-call",
+      "stage": 4,
+      "row": 2
+    }
+  ],
+  "flows": [
+    {
+      "from": "app",
+      "to": "micrometer",
+      "label": "observe",
+      "variant": "emphasis"
+    },
+    {
+      "from": "logs",
+      "to": "micrometer",
+      "label": "correlate"
+    },
+    {
+      "from": "micrometer",
+      "to": "collector",
+      "label": "OTLP",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "from": "collector",
+      "to": "prom",
+      "label": "metrics"
+    },
+    {
+      "from": "collector",
+      "to": "tempo",
+      "label": "traces",
+      "route": "straight",
+      "labelDx": 25
+    },
+    {
+      "from": "collector",
+      "to": "loki",
+      "label": "logs"
+    },
+    {
+      "from": "prom",
+      "to": "grafana",
+      "label": "query",
+      "route": "straight"
+    },
+    {
+      "from": "loki",
+      "to": "alerts",
+      "label": "errors",
+      "variant": "security",
+      "route": "straight"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Instrument once",
+      "items": [
+        "One Observation gives a metric and a span"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Vendor neutral",
+      "items": [
+        "Export OTLP to any backend"
+      ]
+    }
+  ]
+}

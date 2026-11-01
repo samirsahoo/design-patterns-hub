@@ -1,0 +1,261 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Spring Cloud Microservices Platform",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "edge",
+        "label": "Edge",
+        "focus": [
+          "clients",
+          "gateway",
+          "orders"
+        ],
+        "note": "Spring Cloud Gateway routes, authenticates and rate-limits traffic."
+      },
+      {
+        "id": "infra",
+        "label": "Platform services",
+        "focus": [
+          "gateway",
+          "discovery",
+          "config",
+          "orders"
+        ],
+        "note": "Services register with discovery and load configuration at startup."
+      },
+      {
+        "id": "async",
+        "label": "Events",
+        "focus": [
+          "orders",
+          "broker",
+          "payments"
+        ],
+        "note": "Services publish and consume events with Spring Cloud Stream."
+      },
+      {
+        "id": "obs",
+        "label": "Observability",
+        "focus": [
+          "orders",
+          "otel"
+        ],
+        "note": "Micrometer exports metrics and traces via OpenTelemetry."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "clients",
+      "type": "external",
+      "label": "Clients",
+      "sublabel": "web, mobile, partners",
+      "pos": [
+        40,
+        255
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "discovery",
+      "type": "database",
+      "label": "Service discovery",
+      "sublabel": "Eureka, Consul, K8s",
+      "pos": [
+        290,
+        95
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "gateway",
+      "type": "security",
+      "label": "API gateway",
+      "sublabel": "Spring Cloud Gateway",
+      "pos": [
+        290,
+        255
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "config",
+      "type": "database",
+      "label": "Config server",
+      "sublabel": "Git-backed",
+      "pos": [
+        290,
+        430
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "otel",
+      "type": "cloud",
+      "label": "Observability",
+      "sublabel": "OTel collector, Grafana",
+      "pos": [
+        560,
+        95
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "orders",
+      "type": "backend",
+      "label": "Order service",
+      "sublabel": "Resilience4j",
+      "pos": [
+        560,
+        255
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "broker",
+      "type": "messagebus",
+      "label": "Kafka / RabbitMQ",
+      "sublabel": "Spring Cloud Stream",
+      "pos": [
+        560,
+        430
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "inventory",
+      "type": "backend",
+      "label": "Inventory service",
+      "sublabel": "REST",
+      "pos": [
+        820,
+        255
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "payments",
+      "type": "backend",
+      "label": "Payment service",
+      "sublabel": "consumer",
+      "pos": [
+        820,
+        430
+      ],
+      "size": [
+        150,
+        64
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "req",
+      "from": "clients",
+      "to": "gateway",
+      "label": "HTTPS",
+      "variant": "emphasis"
+    },
+    {
+      "id": "lookup",
+      "from": "gateway",
+      "to": "discovery",
+      "label": "lookup",
+      "variant": "dashed",
+      "labelDy": -18
+    },
+    {
+      "id": "props",
+      "from": "gateway",
+      "to": "config",
+      "label": "config",
+      "variant": "dashed",
+      "labelDy": 24
+    },
+    {
+      "id": "route",
+      "from": "gateway",
+      "to": "orders",
+      "label": "route",
+      "variant": "emphasis"
+    },
+    {
+      "id": "call",
+      "from": "orders",
+      "to": "inventory",
+      "label": "REST + CB",
+      "variant": "emphasis"
+    },
+    {
+      "id": "publish",
+      "from": "orders",
+      "to": "broker",
+      "label": "events",
+      "labelDy": 24
+    },
+    {
+      "id": "consume",
+      "from": "broker",
+      "to": "payments",
+      "label": "consume"
+    },
+    {
+      "id": "telemetry",
+      "from": "orders",
+      "to": "otel",
+      "label": "traces",
+      "variant": "dashed",
+      "labelDy": -18
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "One front door",
+      "items": [
+        "Gateway handles auth, routing, limits"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Find + configure",
+      "items": [
+        "Discovery and config at startup"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Fail softly",
+      "items": [
+        "Timeouts, retries, circuit breakers, events"
+      ]
+    }
+  ]
+}

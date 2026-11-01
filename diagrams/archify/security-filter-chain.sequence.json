@@ -1,0 +1,209 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Spring Security Filter Chain for a JWT API",
+    "viewBox": [
+      1080,
+      660
+    ],
+    "column_fit": "spread",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "select",
+        "label": "Select a chain",
+        "focus": [
+          "client",
+          "proxy",
+          "chain"
+        ],
+        "note": "FilterChainProxy picks the first SecurityFilterChain whose matcher fits the request."
+      },
+      {
+        "id": "authn",
+        "label": "Authenticate",
+        "focus": [
+          "chain",
+          "jwt",
+          "context"
+        ],
+        "note": "The bearer token filter validates the JWT and stores the Authentication."
+      },
+      {
+        "id": "authz",
+        "label": "Authorize",
+        "focus": [
+          "chain",
+          "authz",
+          "app"
+        ],
+        "note": "AuthorizationFilter checks the rules before the request reaches the controller."
+      }
+    ]
+  },
+  "participants": [
+    {
+      "id": "client",
+      "type": "external",
+      "label": "Client",
+      "sublabel": "Bearer token"
+    },
+    {
+      "id": "proxy",
+      "type": "security",
+      "label": "FilterChainProxy",
+      "sublabel": "DelegatingFilterProxy"
+    },
+    {
+      "id": "chain",
+      "type": "security",
+      "label": "Security filters",
+      "sublabel": "ordered chain"
+    },
+    {
+      "id": "jwt",
+      "type": "backend",
+      "label": "JwtDecoder",
+      "sublabel": "JWKS, claims"
+    },
+    {
+      "id": "context",
+      "type": "database",
+      "label": "SecurityContext",
+      "sublabel": "per request"
+    },
+    {
+      "id": "authz",
+      "type": "security",
+      "label": "Authorization",
+      "sublabel": "AuthorizationManager"
+    },
+    {
+      "id": "app",
+      "type": "frontend",
+      "label": "Controller",
+      "sublabel": "DispatcherServlet"
+    }
+  ],
+  "segments": [
+    {
+      "from": 140,
+      "to": 250,
+      "label": "Select"
+    },
+    {
+      "from": 258,
+      "to": 394,
+      "label": "Authenticate"
+    },
+    {
+      "from": 402,
+      "to": 576,
+      "label": "Authorize"
+    }
+  ],
+  "messages": [
+    {
+      "from": "client",
+      "to": "proxy",
+      "y": 164,
+      "label": "GET /api/orders",
+      "variant": "emphasis"
+    },
+    {
+      "from": "proxy",
+      "to": "chain",
+      "y": 200,
+      "label": "first matching chain",
+      "variant": "emphasis"
+    },
+    {
+      "from": "chain",
+      "to": "jwt",
+      "y": 272,
+      "label": "decode + validate",
+      "variant": "emphasis"
+    },
+    {
+      "from": "jwt",
+      "to": "chain",
+      "y": 308,
+      "label": "Jwt (sig, exp, aud)",
+      "variant": "return"
+    },
+    {
+      "from": "chain",
+      "to": "context",
+      "y": 344,
+      "label": "store Authentication",
+      "variant": "default"
+    },
+    {
+      "from": "chain",
+      "to": "authz",
+      "y": 416,
+      "label": "check rules",
+      "variant": "security"
+    },
+    {
+      "from": "authz",
+      "to": "chain",
+      "y": 452,
+      "label": "granted / denied",
+      "variant": "return"
+    },
+    {
+      "from": "chain",
+      "to": "app",
+      "y": 488,
+      "label": "proceed",
+      "variant": "emphasis"
+    },
+    {
+      "from": "app",
+      "to": "client",
+      "y": 524,
+      "label": "200 OK",
+      "variant": "return"
+    },
+    {
+      "from": "chain",
+      "to": "client",
+      "y": 560,
+      "label": "401 / 403 if failed",
+      "variant": "dashed"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "chain",
+      "from": 194,
+      "to": 496,
+      "type": "security"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Before the app",
+      "items": [
+        "Security runs as servlet filters"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Stateless",
+      "items": [
+        "Validate the JWT on every request"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Deny by default",
+      "items": [
+        "anyRequest().authenticated() last"
+      ]
+    }
+  ]
+}
