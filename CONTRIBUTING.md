@@ -77,9 +77,6 @@ node scripts/check_render.mjs http://localhost:1313/ --width 390   # optional, n
   the build checks them.
 - Quote sparingly and attribute every quotation.
 
-## Licensing of contributions
+## Copyright of contributions
 
-By contributing you agree that your written content is licensed under CC BY 4.0 and
-your code under the MIT License, as described in [LICENSE](LICENSE). Only contribute
-material you have the right to license this way; do not copy text, code or images from
-other sources unless their licence allows it and you attribute them.
+This project is copyright © 2026 Samir Kumar Sahoo (https://github.com/samirsahoo). All rights reserved. By contributing you assign copyright in your contribution to Samir Kumar Sahoo, or grant him an exclusive, perpetual licence to use it, as described in [LICENSE](LICENSE). Only contribute material you have the right to give in this way; do not copy text, code or images from other sources.

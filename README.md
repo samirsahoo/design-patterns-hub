@@ -23,7 +23,7 @@ from source files that CI compiles, runs and tests.
 - [Build and validation](#build-and-validation)
 - [Deploying to GitHub Pages](#deploying-to-github-pages)
 - [Contributing](#contributing)
-- [License](#license)
+- [Copyright](#copyright)
 
 ## Site structure
 
@@ -201,8 +201,6 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). In short: open an issue for larger chang
 follow the article structure, include code through the `code` shortcode, and run the
 validation commands above.
 
-## License
+## Copyright
 
-Written content is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/);
-code is licensed under the MIT License. See [LICENSE](LICENSE). Mermaid is included
-under its MIT License.
+© 2026 Samir Kumar Sahoo (https://github.com/samirsahoo). All rights reserved. See [LICENSE](LICENSE). Mermaid and the Archify viewer runtime keep their MIT licences.

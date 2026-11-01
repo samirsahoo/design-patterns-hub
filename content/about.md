@@ -85,6 +85,6 @@ Each article's front matter has a `status` field. Only complete articles are pub
 
 The articles are written carefully and reviewed, but they are not a substitute for official documentation. Each article lists references; where behaviour depends on a version, follow the linked official documentation. If you find an error, use the "Edit it on GitHub" or "open an issue" links at the bottom of each article.
 
-## Licence
+## Copyright
 
-Text content is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Code examples are licensed under the MIT License. See the `LICENSE` file in the repository for details. Mermaid is distributed under the MIT License; its licence file is served alongside it.
+© 2026 Samir Kumar Sahoo (https://github.com/samirsahoo). All rights reserved. All content in this handbook, including text, code examples, images, diagrams and the interactive Archify diagrams, is the property of Samir Kumar Sahoo. It may not be copied, reproduced or redistributed without written permission. Brief quotations with attribution and a link to the original page are welcome.
